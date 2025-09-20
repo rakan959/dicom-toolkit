@@ -23,7 +23,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T07 | MPR engine & adapter                                   | done   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/\*                             | A05-mpr           | P03-mpr-roundtrip      |
 | T09 | Segmentation tools (brush/threshold/region/lasso)      | done   | 3        | M    | H    | [T06]      | [F-009]                         | src/core/segmentation.ts                                             | A07-seg           | M02-resample           |
 | T10 | DICOM SEG import/export                                | done   | 3        | M    | H    | [T09]      | [F-010]                         | src/core/segmentation.ts                                             | A08-seg-io        | P04-seg-spatial        |
-| T11 | Mesh generation + STL/GLB export                       | todo   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
+| T11 | Mesh generation + STL/GLB export                       | done   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
 | T12 | Video export (H.264 MKV default)                       | todo   | 4        | M    | M    | [T06]      | [F-012,F-013]                   | src/core/video/exporter.ts                                           | A10-video         | M03-layout-permutation |
 | T13 | GH Pages deploy workflow                               | done   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
 | T14 | Advanced anonymizer UI preview & routing polish        | todo   | 2        | S    | M    | [T05,T04]  | [F-007,F-014]                   | src/ui/AnonymizerAdvanced/\*                                         | A03-advanced-anon | —                      |
@@ -188,7 +188,7 @@ properties: [P03-mpr-roundtrip]
 
 - id: T11
   title: Mesh generation + STL/GLB export
-  status: todo
+  status: done
   priority: 4
   size: S
   risk: M
