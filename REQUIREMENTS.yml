@@ -1,0 +1,102 @@
+# Atomic, testable requirements with rationale.
+
+# IDs: F-### (functional), N-### (non-functional), S-### (safety/privacy)
+
+meta:
+  version: 1
+  source: "DICOM Toolkit SPEC"
+  license: MIT
+
+requirements:
+
+  - id: F-001
+    text: The app shall run entirely client-side in a browser with no network requests after initial load.
+    rationale: Offline, privacy-first.
+
+  - id: F-002
+    text: The project shall build as a static site and deploy to GitHub Pages.
+    rationale: Easy hosting.
+
+  - id: F-003
+    text: The viewer shall support a configurable multi-viewport layout with drag-to-rearrange and series-to-viewport assignment.
+    rationale: Clinical workflows vary.
+
+  - id: F-004
+    text: The viewer shall provide MPR for CT/MR volumes with correct spacing/orientation handling.
+    rationale: 3D context.
+
+  - id: F-005
+    text: The series browser shall display series as a tree with thumbnails, allow rename/remove, and context menu with export/export anonymized/export to video.
+    rationale: Discoverability.
+
+  - id: F-006
+    text: The anonymizer shall provide Simple mode that filters non-DICOM, anonymizes all DICOM headers using non-deterministic per-session overwrites with a stable mapping, drops images with burned-in PHI, preserves pixel data, and outputs a ZIP.
+    rationale: Fast batch anonymization.
+
+  - id: F-007
+    text: The anonymizer shall provide Advanced mode with preview, pixel redaction, series selection, and custom overrides for common PHI tags.
+    rationale: Granular control.
+
+  - id: F-008
+    text: The system shall support ultrasound (multi-frame and single-frame) viewing, anonymization, and export.
+    rationale: US is common in practice.
+
+  - id: F-009
+    text: The segmentation module shall include brush/erase, threshold, region-growing, and lasso tools.
+    rationale: “Smart tools” minimum.
+
+  - id: F-010
+    text: The system shall import and export DICOM SEG objects that reference the loaded dataset.
+    rationale: Interoperability.
+
+  - id: F-011
+    text: The 3D module shall generate meshes from segmentations and export as STL and GLB.
+    rationale: Downstream modeling/CAD.
+
+  - id: F-012
+    text: The video exporter shall export either a single series or the entire layout at a configurable FPS/resolution/quality, defaulting to H.264 in MKV container when available.
+    rationale: Communication.
+
+  - id: F-013
+    text: Video export shall allow toggles for overlays, annotations, and a PHI overlay guard defaulting to OFF.
+    rationale: Privacy-safe defaults.
+
+  - id: F-014
+    text: The UI shall route to the Advanced anonymization workflow from the series browser.
+    rationale: Discoverable pathway.
+
+  - id: F-015
+    text: The app shall allow drag-and-drop or file picker for loose files, folders, or ZIP inputs; outputs ZIPs for anonymized exports.
+    rationale: Usability.
+
+  - id: S-001
+    text: The anonymizer shall use cryptographically secure randomness and maintain a per-session stable mapping for overwritten values.
+    rationale: True anonymization with referential stability.
+
+  - id: S-002
+    text: The app shall hide overlays containing PHI by default and exclude them from exports unless explicitly enabled.
+    rationale: Minimize accidental PHI exposure.
+
+  - id: S-003
+    text: Advanced mode redacted pixels shall not leak original values in stored artifacts.
+    rationale: Prevent PHI leakage.
+
+  - id: N-001
+    text: The codebase shall include linting, formatting, and type checks enforced in CI.
+    rationale: Maintainability.
+
+  - id: N-002
+    text: Test coverage floor shall be >= 80%; mutation testing threshold break < 65%.
+    rationale: Test rigor.
+
+  - id: N-003
+    text: CI shall fail if source files change in a PR without corresponding test changes.
+    rationale: Guard against untested changes.
+
+  - id: N-004
+    text: A requirements-to-tests traceability check shall fail CI if any requirement ID is not referenced by at least one test via "@req: <ID>" tag.
+    rationale: Spec alignment.
+
+  - id: N-005
+    text: The system shall operate without DICOMweb; any HTTP requests to remote hosts are forbidden at runtime.
+    rationale: Offline-only constraint.
