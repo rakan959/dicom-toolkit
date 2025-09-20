@@ -42,13 +42,18 @@ async function filterDicomFiles(files: File[]): Promise<File[]> {
   return out;
 }
 
-/** Parse IDs encoded in filename: study-<A>_series-<B>_inst-<C>.dcm */
-function parseIdsFromName(name: string): { study: string; series: string; inst: string } | null {
-  // Allow underscores and periods in UID portions while stopping at the .dcm extension
-  const re = /study-([A-Za-z0-9_.]+)_series-([A-Za-z0-9_.]+)_inst-([A-Za-z0-9_.]+)\.dcm$/i;
+/** Parse IDs encoded in filename: study-<A>_series-<B>_inst-<C>[ _frames-<N>][ _mod-<XX>].dcm */
+function parseIdsFromName(
+  name: string,
+): { study: string; series: string; inst: string; frames?: number; mod?: string } | null {
+  // Extended heuristic: optional `_frames-<N>` and `_mod-<XX>` suffixes before .dcm
+  const re =
+    /study-([A-Za-z0-9_.]+)_series-([A-Za-z0-9_.]+)_inst-([A-Za-z0-9_.]+)(?:_frames-(\d+))?(?:_mod-([A-Za-z0-9]+))?\.dcm$/i;
   const m = re.exec(name);
   if (!m) return null;
-  return { study: m[1], series: m[2], inst: m[3] };
+  const frames = m[4] ? Math.max(1, parseInt(m[4]!, 10)) : undefined;
+  const mod = m[5] ? m[5].toUpperCase() : undefined;
+  return { study: m[1], series: m[2], inst: m[3], frames, mod };
 }
 
 /**
@@ -73,7 +78,9 @@ export async function buildManifestFromFiles(files: File[]): Promise<Study[]> {
     if (!acc.has(ids.study)) acc.set(ids.study, new Map());
     const sMap = acc.get(ids.study)!;
     if (!sMap.has(ids.series)) sMap.set(ids.series, new Set());
-    sMap.get(ids.series)!.add(ids.inst);
+    // Encode instance as a tuple string to ensure consistent set membership
+    const encoded = `${ids.inst}|${ids.frames ?? 1}|${(ids.mod ?? "OT").toUpperCase()}`;
+    sMap.get(ids.series)!.add(encoded);
   }
   // Build output deterministically: sort keys and instance IDs
   const studies: Study[] = Array.from(acc.keys())
@@ -82,14 +89,23 @@ export async function buildManifestFromFiles(files: File[]): Promise<Study[]> {
       studyInstanceUID: st,
       series: Array.from(acc.get(st)!.keys())
         .sort((a, b) => a.localeCompare(b))
-        .map((se) => ({
-          seriesInstanceUID: se,
-          modality: "OT", // unknown at this stage
-          description: undefined,
-          sopInstances: Array.from(acc.get(st)!.get(se)!)
-            .sort((a, b) => a.localeCompare(b))
-            .map((iid) => ({ sopInstanceUID: iid, frameCount: 1 })),
-        })),
+        .map((se) => {
+          const insts = Array.from(acc.get(st)!.get(se)!)
+            .map((s) => {
+              const [id, framesStr, modRaw] = s.split("|");
+              const framesNum = Math.max(1, Number(framesStr) || 1);
+              const mod = (modRaw || "OT").toUpperCase();
+              return { id, frames: framesNum, mod } as { id: string; frames: number; mod: string };
+            })
+            .sort((a, b) => a.id.localeCompare(b.id));
+          const modality = insts.some((x) => x.mod === "US") ? "US" : (insts[0]?.mod ?? "OT");
+          return {
+            seriesInstanceUID: se,
+            modality,
+            description: undefined,
+            sopInstances: insts.map((x) => ({ sopInstanceUID: x.id, frameCount: x.frames })),
+          };
+        }),
     }));
   return studies;
 }

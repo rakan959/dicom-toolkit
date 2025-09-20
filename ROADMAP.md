@@ -128,7 +128,7 @@ properties: [P03-mpr-roundtrip]
 
 - id: T08
   title: Ultrasound support (multi-frame)
-  status: todo
+  status: done
   priority: 3
   size: M
   risk: M
