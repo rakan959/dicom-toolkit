@@ -21,7 +21,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T05 | Advanced anonymizer (preview, redaction, overrides)    | done   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/\*                 | A03-advanced-anon | P02-redaction          |
 | T06 | Configurable layout + viewport assignment              | done   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/\*                                                     | A04-layout        | —                      |
 | T07 | MPR engine & adapter                                   | todo   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/\*                             | A05-mpr           | P03-mpr-roundtrip      |
-| T08 | Ultrasound support (multi-frame)                       | todo   | 3        | M    | M    | [T02,T06]  | [F-008]                         | src/core/seriesStore.ts, adapters/cornerstone/\*                     | A06-us            | —                      |
+| T14 | Advanced anonymizer UI preview & routing polish        | done   | 2        | S    | M    | [T05,T04]  | [F-007,F-014]                   | src/ui/AnonymizerAdvanced/\*                                         | A03-advanced-anon | —                      |
 | T09 | Segmentation tools (brush/threshold/region/lasso)      | todo   | 3        | M    | H    | [T06]      | [F-009]                         | src/core/segmentation.ts                                             | A07-seg           | M02-resample           |
 | T10 | DICOM SEG import/export                                | todo   | 3        | M    | H    | [T09]      | [F-010]                         | src/core/segmentation.ts                                             | A08-seg-io        | P04-seg-spatial        |
 | T11 | Mesh generation + STL/GLB export                       | todo   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
@@ -189,7 +189,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T14
   title: Advanced anonymizer UI preview & routing polish
-  status: todo
+  status: done
   priority: 2
   size: S
   risk: M
