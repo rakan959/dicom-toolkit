@@ -9,9 +9,9 @@ describe("SEG IO + Mesh + Video", () => {
     // @req: F-010
     expect(() => importSEG(new Uint8Array())).toThrowError(/NotImplemented/);
     expect(() => exportSEG(new Uint8Array(), [1, 1, 1])).toThrowError(/NotImplemented/);
-    expect(() => applyBrush(new Uint8Array(), 1, 1, { x: 0, y: 0, r: 1 })).toThrowError(
-      /NotImplemented/,
-    );
+    // brush is implemented in this slice
+    const painted = applyBrush(new Uint8Array(1), 1, 1, { x: 0, y: 0, r: 1, label: 1 });
+    expect(Array.from(painted)).toEqual([1]);
   });
 
   it("Mesh exports STL and GLB", async () => {
