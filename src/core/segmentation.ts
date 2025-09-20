@@ -159,6 +159,8 @@ export function importSEG(segBytes: Uint8Array): {
   segments: number;
   dims: [number, number, number];
   labelmap: Uint8Array;
+  SeriesInstanceUID?: string;
+  FrameOfReferenceUID?: string;
 } {
   // @req: F-010
   // Minimal, self-describing container decode.
@@ -184,10 +186,18 @@ export function importSEG(segBytes: Uint8Array): {
   const expected = dims[0] * dims[1] * dims[2];
   if (buf.length !== expected) throw new Error("importSEG: size mismatch");
   const segments = obj.segments as number;
-  return { segments: segments | 0, dims, labelmap: buf };
+  const SeriesInstanceUID =
+    typeof obj.SeriesInstanceUID === "string" ? obj.SeriesInstanceUID : undefined;
+  const FrameOfReferenceUID =
+    typeof obj.FrameOfReferenceUID === "string" ? obj.FrameOfReferenceUID : undefined;
+  return { segments: segments | 0, dims, labelmap: buf, SeriesInstanceUID, FrameOfReferenceUID };
 }
 
-export function exportSEG(labelmap: Uint8Array, dims: [number, number, number]): Uint8Array {
+export function exportSEG(
+  labelmap: Uint8Array,
+  dims: [number, number, number],
+  opts?: { SeriesInstanceUID?: string; FrameOfReferenceUID?: string },
+): Uint8Array {
   // @req: F-010
   // Minimal, self-describing container encode with a DICOM Part 10 preamble.
   // Note: This is a transitional container; a follow-up slice will create a full DICOM SEG dataset.
@@ -201,7 +211,9 @@ export function exportSEG(labelmap: Uint8Array, dims: [number, number, number]):
   }
   const segments = seen.size;
   const dataB64 = btoa(String.fromCharCode(...labelmap));
-  const payload = { _format: "SEG-MIN-1", dims, segments, data: dataB64 };
+  const payload: any = { _format: "SEG-MIN-1", dims, segments, data: dataB64 };
+  if (opts?.SeriesInstanceUID) payload.SeriesInstanceUID = opts.SeriesInstanceUID;
+  if (opts?.FrameOfReferenceUID) payload.FrameOfReferenceUID = opts.FrameOfReferenceUID;
   const jsonBytes = new TextEncoder().encode(JSON.stringify(payload));
   // Build Part 10 preamble: 128 zero bytes + 'DICM'
   const preamble = new Uint8Array(132);

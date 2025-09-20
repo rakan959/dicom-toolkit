@@ -176,7 +176,7 @@ properties: [P03-mpr-roundtrip]
 
 - id: T10b
   title: Build full DICOM SEG dataset with dcmjs (uses SeriesInstanceUID/FrameOfReference)
-  status: todo
+  status: done
   priority: 3
   size: M
   risk: M
