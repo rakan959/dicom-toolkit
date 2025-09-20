@@ -94,7 +94,7 @@ requirements:
     rationale: Guard against untested changes.
 
   - id: N-004
-    text: A requirements-to-tests traceability check shall fail CI if any requirement ID is not referenced by at least one test via "@req: <ID>" tag.
+    text: 'A requirements-to-tests traceability check shall fail CI if any requirement ID is not referenced by at least one test via "@req: <ID>" tag.'
     rationale: Spec alignment.
 
   - id: N-005

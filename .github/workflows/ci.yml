@@ -1,6 +1,38 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm ci
+      - name: Format check
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests + Coverage
+        run: npm run coverage
+      - name: Requirements traceability
+        run: npm run check:reqs
+      - name: Guard untested source changes
+        run: node tools/check_tests_changed.mjs
+      - name: Build static site
+        run: npm run build
+name: CI
+
+on:
   pull_request:
   push:
     branches: [main]
