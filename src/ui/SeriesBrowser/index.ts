@@ -31,7 +31,17 @@ export function renderSeriesBrowser(
   container.setAttribute("data-test", "series-browser");
 
   // Sort studies deterministically
-  const studies = [...manifest].sort((a, b) => byAsc(a.studyInstanceUID, b.studyInstanceUID));
+  const canonicalStudySig = (st: Study) => {
+    const seriesSigs = st.series
+      .map((se) => {
+        const inst = se.sopInstances.map((i) => i.sopInstanceUID).sort(byAsc).join("~");
+        return `${se.seriesInstanceUID}#${inst}`;
+      })
+      .sort(byAsc)
+      .join("|");
+    return `${st.studyInstanceUID}::${seriesSigs}`;
+  };
+  const studies = [...manifest].sort((a, b) => byAsc(canonicalStudySig(a), canonicalStudySig(b)));
   for (const st of studies) {
     const stEl = document.createElement("section");
     stEl.setAttribute("data-test", "study-item");
@@ -42,7 +52,11 @@ export function renderSeriesBrowser(
     stEl.appendChild(h);
 
     const ul = document.createElement("ul");
-    const series = [...st.series].sort((a, b) => byAsc(a.seriesInstanceUID, b.seriesInstanceUID));
+    const seriesKey = (se: Study["series"][number]) => {
+      const inst = se.sopInstances.map((i) => i.sopInstanceUID).sort(byAsc).join("~");
+      return `${se.seriesInstanceUID}#${inst}`;
+    };
+    const series = [...st.series].sort((a, b) => byAsc(seriesKey(a), seriesKey(b)));
     for (const se of series) {
       const li = document.createElement("li");
       li.setAttribute("data-test", "series-item");

@@ -19,7 +19,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T03 | Simple anonymizer pipeline                             | done   | 1        | M    | M    | [T02]      | [F-006,S-001,S-002]             | src/core/anonymizer.ts                                               | A02-simple-anon   | P01-rng-map            |
 | T04 | Series browser UI + context menus                      | done   | 2        | M    | M    | [T02]      | [F-005,F-014]                   | src/ui/SeriesBrowser/*                                              | A01-load-browse   | —                      |
 | T05 | Advanced anonymizer (preview, redaction, overrides)    | todo   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/*                 | A03-advanced-anon | P02-redaction          |
-| T06 | Configurable layout + viewport assignment              | todo   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/*                                                     | A04-layout        | —                      |
+| T06 | Configurable layout + viewport assignment              | done   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/*                                                     | A04-layout        | —                      |
 | T07 | MPR engine & adapter                                   | todo   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/*                             | A05-mpr           | P03-mpr-roundtrip      |
 | T08 | Ultrasound support (multi-frame)                       | todo   | 3        | M    | M    | [T02,T06]  | [F-008]                         | src/core/seriesStore.ts, adapters/cornerstone/*                     | A06-us            | —                      |
 | T09 | Segmentation tools (brush/threshold/region/lasso)      | todo   | 3        | M    | H    | [T06]      | [F-009]                         | src/core/segmentation.ts                                             | A07-seg           | M02-resample           |
@@ -92,7 +92,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T06
   title: Configurable layout + viewport assignment
-  status: todo
+  status: done
   priority: 2
   size: S
   risk: M
