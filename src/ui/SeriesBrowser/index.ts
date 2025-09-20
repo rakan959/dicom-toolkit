@@ -1,4 +1,4 @@
-import type { Study } from "@src/types";
+import type { Study } from "../../types";
 
 export interface SeriesBrowserCallbacks {
   onRename?: (studyUID: string, seriesUID: string) => void;
