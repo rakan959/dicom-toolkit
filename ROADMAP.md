@@ -18,7 +18,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T02 | Series import: file/dir/zip parsing & manifest         | done   | 1        | M    | M    | [T01]      | [F-001,F-015]                   | src/core/seriesStore.ts, CONTRACTS/dicom-series-manifest.schema.json | A01-load-browse   | M01-permute-order      |
 | T03 | Simple anonymizer pipeline                             | done   | 1        | M    | M    | [T02]      | [F-006,S-001,S-002]             | src/core/anonymizer.ts                                               | A02-simple-anon   | P01-rng-map            |
 | T04 | Series browser UI + context menus                      | done   | 2        | M    | M    | [T02]      | [F-005,F-014]                   | src/ui/SeriesBrowser/\*                                              | A01-load-browse   | —                      |
-| T05 | Advanced anonymizer (preview, redaction, overrides)    | todo   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/\*                 | A03-advanced-anon | P02-redaction          |
+| T05 | Advanced anonymizer (preview, redaction, overrides)    | done   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/\*                 | A03-advanced-anon | P02-redaction          |
 | T06 | Configurable layout + viewport assignment              | done   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/\*                                                     | A04-layout        | —                      |
 | T07 | MPR engine & adapter                                   | todo   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/\*                             | A05-mpr           | P03-mpr-roundtrip      |
 | T08 | Ultrasound support (multi-frame)                       | todo   | 3        | M    | M    | [T02,T06]  | [F-008]                         | src/core/seriesStore.ts, adapters/cornerstone/\*                     | A06-us            | —                      |
@@ -27,6 +27,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T11 | Mesh generation + STL/GLB export                       | todo   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
 | T12 | Video export (H.264 MKV default)                       | todo   | 4        | M    | M    | [T06]      | [F-012,F-013]                   | src/core/video/exporter.ts                                           | A10-video         | M03-layout-permutation |
 | T13 | GH Pages deploy workflow                               | done   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
+| T14 | Advanced anonymizer UI preview & routing polish        | todo   | 2        | S    | M    | [T05,T04]  | [F-007,F-014]                   | src/ui/AnonymizerAdvanced/\*                                         | A03-advanced-anon | —                      |
 
 ### Task YAML (agent-friendly)
 
@@ -80,7 +81,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T05
   title: Advanced anonymizer (preview, redaction, overrides)
-  status: todo
+  status: done
   priority: 2
   size: M
   risk: H
@@ -184,4 +185,16 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
   requirements: [F-002]
   artifacts_to_touch: [.github/workflows/gh-pages.yml, vite.config.ts]
   acceptance_tests: [A11-gh-pages]
+  properties: []
+
+- id: T14
+  title: Advanced anonymizer UI preview & routing polish
+  status: todo
+  priority: 2
+  size: S
+  risk: M
+  depends_on: [T05, T04]
+  requirements: [F-007, F-014]
+  artifacts_to_touch: [src/ui/AnonymizerAdvanced/*]
+  acceptance_tests: [A03-advanced-anon]
   properties: []
