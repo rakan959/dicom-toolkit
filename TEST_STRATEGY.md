@@ -65,3 +65,9 @@ Tests are the executable specification. Every requirement in `REQUIREMENTS.yml` 
 ## Traceability index
 
 Each acceptance/property/metamorphic test lists `@req:` tags linking to `REQUIREMENTS.yml`. The CI script `tools/check_requirements.ts` enforces that every requirement is referenced by at least one test.
+
+## Coverage policy (N-002)
+
+- Coverage thresholds are enforced at 80% (lines/funcs/branches/statements) over executable source files only.
+- We include `src/**/*.{ts,tsx}` and exclude non-executable or config/scaffold files (site, tools, contracts, d.ts, barrel index.ts) to measure meaningful coverage.
+- Mutation quick-run is tracked separately and must remain above the configured break threshold.
