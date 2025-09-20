@@ -17,7 +17,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T01 | Init repo, CI, lint, types, coverage, mutation (quick) | done   | 1        | S    | M    | []         | [N-001,N-002,N-003,N-004,F-002] | package.json, tsconfig.json, vitest.config.ts, .github/workflows/*  | A00-CI-smoke      | P00-traceability       |
 | T02 | Series import: file/dir/zip parsing & manifest         | done   | 1        | M    | M    | [T01]      | [F-001,F-015]                   | src/core/seriesStore.ts, CONTRACTS/dicom-series-manifest.schema.json | A01-load-browse   | M01-permute-order      |
 | T03 | Simple anonymizer pipeline                             | done   | 1        | M    | M    | [T02]      | [F-006,S-001,S-002]             | src/core/anonymizer.ts                                               | A02-simple-anon   | P01-rng-map            |
-| T04 | Series browser UI + context menus                      | todo   | 2        | M    | M    | [T02]      | [F-005,F-014]                   | src/ui/SeriesBrowser/*                                              | A01-load-browse   | —                      |
+| T04 | Series browser UI + context menus                      | done   | 2        | M    | M    | [T02]      | [F-005,F-014]                   | src/ui/SeriesBrowser/*                                              | A01-load-browse   | —                      |
 | T05 | Advanced anonymizer (preview, redaction, overrides)    | todo   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/*                 | A03-advanced-anon | P02-redaction          |
 | T06 | Configurable layout + viewport assignment              | todo   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/*                                                     | A04-layout        | —                      |
 | T07 | MPR engine & adapter                                   | todo   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/*                             | A05-mpr           | P03-mpr-roundtrip      |
@@ -68,7 +68,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T04
   title: Series browser UI + context menus
-  status: todo
+  status: done
   priority: 2
   size: M
   risk: M

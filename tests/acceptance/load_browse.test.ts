@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { buildManifestFromFiles } from "@core/seriesStore";
+import { renderSeriesBrowser } from "@ui/SeriesBrowser";
 
 describe("Load & Browse", () => {
   it("filters non-DICOM and doesn't crash building manifest (placeholder)", async () => {
@@ -85,5 +86,69 @@ describe("Load & Browse", () => {
     expect(se.seriesInstanceUID).toBe("9.10_11.12");
     const insts = se.sopInstances.map((i) => i.sopInstanceUID).sort((a, b) => a.localeCompare(b));
     expect(insts).toEqual(["13_14.15", "16_17.18"]);
+  });
+
+  it("renders a Series Browser tree and wires actions", async () => {
+    // @req: F-005
+    // Given a simple manifest with one study and two series
+    const manifest = [
+      {
+        studyInstanceUID: "A",
+        series: [
+          { seriesInstanceUID: "S1", sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }], modality: "OT", description: "Series 1" },
+          { seriesInstanceUID: "S2", sopInstances: [{ sopInstanceUID: "J1", frameCount: 1 }], modality: "OT", description: "Series 2" },
+        ],
+      },
+    ];
+    const root = document.createElement("div");
+    const calls: string[] = [];
+    renderSeriesBrowser(root, manifest, {
+      onRename: (st, se) => calls.push(`rename:${st}:${se}`),
+      onRemove: (st, se) => calls.push(`remove:${st}:${se}`),
+      onExport: (st, se) => calls.push(`export:${st}:${se}`),
+      onExportAnonymized: (st, se) => calls.push(`exportAnon:${st}:${se}`),
+      onExportVideo: (st, se) => calls.push(`exportVideo:${st}:${se}`),
+    });
+    // Then studies and series are visible as list items
+    const studyItems = root.querySelectorAll('[data-test="study-item"]');
+    expect(studyItems.length).toBe(1);
+    const seriesItems = root.querySelectorAll('[data-test="series-item"]');
+    expect(seriesItems.length).toBe(2);
+    // When clicking actions on first series
+    const first = seriesItems[0] as HTMLElement;
+    (first.querySelector('[data-test="action-rename"]') as HTMLButtonElement).click();
+    (first.querySelector('[data-test="action-remove"]') as HTMLButtonElement).click();
+    (first.querySelector('[data-test="action-export"]') as HTMLButtonElement).click();
+    (first.querySelector('[data-test="action-export-anon"]') as HTMLButtonElement).click();
+    (first.querySelector('[data-test="action-export-video"]') as HTMLButtonElement).click();
+    // Then callbacks received the expected calls
+    expect(calls).toEqual([
+      "rename:A:S1",
+      "remove:A:S1",
+      "export:A:S1",
+      "exportAnon:A:S1",
+      "exportVideo:A:S1",
+    ]);
+  });
+
+  it("routes from Series Browser to Advanced Anonymization", async () => {
+    // @req: F-014
+    const manifest = [
+      {
+        studyInstanceUID: "A",
+        series: [
+          { seriesInstanceUID: "S1", sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }], modality: "OT" },
+        ],
+      },
+    ];
+    const root = document.createElement("div");
+    const routeSpy = vi.fn();
+    renderSeriesBrowser(root, manifest, { onRouteToAdvancedAnonymize: routeSpy });
+    // When user invokes the "Advanced Anonymize" action from context menu
+    const btn = root.querySelector('[data-test="action-advanced-anon"]') as HTMLButtonElement;
+    btn.click();
+    // Then UI routes via callback with correct identifiers
+    expect(routeSpy).toHaveBeenCalledTimes(1);
+    expect(routeSpy).toHaveBeenCalledWith("A", "S1");
   });
 });
