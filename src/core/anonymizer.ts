@@ -13,7 +13,19 @@ export class Anonymizer {
   /** Returns whether an instance should be dropped in simple mode due to burned-in PHI. */
   shouldDropForBurnedInPHI(_headers: Record<string, unknown>): boolean {
     if (this.mode !== "simple") return false;
-    throw new Error("NotImplemented: shouldDropForBurnedInPHI");
+    // DICOM (0028,0301) BurnedInAnnotation: "YES" or "NO"
+    // Accept case-insensitive key and value; also handle boolean/number truthiness
+    const key = Object.keys(_headers || {}).find((k) => k.toLowerCase() === "burnedinannotation");
+    if (!key) return false;
+    const v = (_headers as any)[key];
+    if (typeof v === "string") {
+      const s = v.trim().toLowerCase();
+      if (s === "yes" || s === "true" || s === "1") return true;
+      return false;
+    }
+    if (typeof v === "boolean") return v === true;
+    if (typeof v === "number") return v !== 0;
+    return false;
   }
 
   /** Maps PHI tag values to randomized equivalents, stable within session. */
