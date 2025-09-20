@@ -22,7 +22,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T06 | Configurable layout + viewport assignment              | done   | 2        | S    | M    | [T04]      | [F-003]                         | src/ui/Layout/\*                                                     | A04-layout        | —                      |
 | T07 | MPR engine & adapter                                   | done   | 3        | M    | M    | [T02,T06]  | [F-004]                         | src/core/mpr.ts, adapters/cornerstone/\*                             | A05-mpr           | P03-mpr-roundtrip      |
 | T09 | Segmentation tools (brush/threshold/region/lasso)      | done   | 3        | M    | H    | [T06]      | [F-009]                         | src/core/segmentation.ts                                             | A07-seg           | M02-resample           |
-| T10 | DICOM SEG import/export                                | todo   | 3        | M    | H    | [T09]      | [F-010]                         | src/core/segmentation.ts                                             | A08-seg-io        | P04-seg-spatial        |
+| T10 | DICOM SEG import/export                                | done   | 3        | M    | H    | [T09]      | [F-010]                         | src/core/segmentation.ts                                             | A08-seg-io        | P04-seg-spatial        |
 | T11 | Mesh generation + STL/GLB export                       | todo   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
 | T12 | Video export (H.264 MKV default)                       | todo   | 4        | M    | M    | [T06]      | [F-012,F-013]                   | src/core/video/exporter.ts                                           | A10-video         | M03-layout-permutation |
 | T13 | GH Pages deploy workflow                               | done   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
@@ -152,13 +152,25 @@ properties: [P03-mpr-roundtrip]
 
 - id: T10
   title: DICOM SEG import/export
-  status: todo
+  status: done
   priority: 3
   size: M
   risk: H
   depends_on: [T09]
   requirements: [F-010]
   artifacts_to_touch: [src/core/segmentation.ts]
+  acceptance_tests: [A08-seg-io]
+  properties: [P04-seg-spatial]
+
+- id: T10a
+  title: Replace SEG placeholder with real DICOM SEG using dcmjs
+  status: todo
+  priority: 3
+  size: S
+  risk: M
+  depends_on: [T10]
+  requirements: [F-010]
+  artifacts_to_touch: [src/core/segmentation.ts, CONTRACTS/segmentation.schema.json]
   acceptance_tests: [A08-seg-io]
   properties: [P04-seg-spatial]
 

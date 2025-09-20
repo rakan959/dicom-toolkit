@@ -155,12 +155,43 @@ export function resampleNearest(
   return { data: out, w: newW, h: newH };
 }
 
-export function importSEG(_segBytes: Uint8Array): { segments: number } {
+export function importSEG(segBytes: Uint8Array): {
+  segments: number;
+  dims: [number, number, number];
+  labelmap: Uint8Array;
+} {
   // @req: F-010
-  throw new Error("NotImplemented: importSEG");
+  // Minimal, self-describing container decode (JSON-based placeholder for DICOM SEG)
+  // Format: { _format:"SEG-MIN-1", dims:[w,h,d], segments:number, data:base64 }
+  if (segBytes.length === 0) throw new Error("NotImplemented: importSEG");
+  const json = new TextDecoder().decode(segBytes);
+  const obj: any = JSON.parse(json);
+  if (!obj || obj._format !== "SEG-MIN-1") throw new Error("importSEG: unknown format");
+  const dims = obj.dims as [number, number, number];
+  if (!Array.isArray(dims) || dims.length !== 3) throw new Error("importSEG: invalid dims");
+  const dataB64 = obj.data as string;
+  if (typeof dataB64 !== "string") throw new Error("importSEG: invalid data");
+  const buf = Uint8Array.from(atob(dataB64), (c) => c.charCodeAt(0));
+  const expected = dims[0] * dims[1] * dims[2];
+  if (buf.length !== expected) throw new Error("importSEG: size mismatch");
+  const segments = obj.segments as number;
+  return { segments: segments | 0, dims, labelmap: buf };
 }
 
-export function exportSEG(_labelmap: Uint8Array, _dims: [number, number, number]): Uint8Array {
+export function exportSEG(labelmap: Uint8Array, dims: [number, number, number]): Uint8Array {
   // @req: F-010
-  throw new Error("NotImplemented: exportSEG");
+  // Minimal, self-describing container encode (JSON-based placeholder for DICOM SEG)
+  if (labelmap.length === 0) throw new Error("NotImplemented: exportSEG");
+  const [w, h, d] = dims;
+  if (labelmap.length !== w * h * d) throw new Error("exportSEG: size mismatch");
+  // Count unique labels excluding 0
+  const seen = new Set<number>();
+  for (const v of labelmap) {
+    if (v !== 0) seen.add(v);
+  }
+  const segments = seen.size;
+  const dataB64 = btoa(String.fromCharCode(...labelmap));
+  const payload = { _format: "SEG-MIN-1", dims, segments, data: dataB64 };
+  const json = JSON.stringify(payload);
+  return new TextEncoder().encode(json);
 }

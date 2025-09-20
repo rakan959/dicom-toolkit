@@ -7,11 +7,13 @@ describe("SEG IO + Mesh + Video", () => {
   it("SEG import/export works with preserved references", () => {
     // @req: F-009
     // @req: F-010
-    expect(() => importSEG(new Uint8Array())).toThrowError(/NotImplemented/);
-    expect(() => exportSEG(new Uint8Array(), [1, 1, 1])).toThrowError(/NotImplemented/);
     // brush is implemented in this slice
-    const painted = applyBrush(new Uint8Array(1), 1, 1, { x: 0, y: 0, r: 1, label: 1 });
-    expect(Array.from(painted)).toEqual([1]);
+    const painted = applyBrush(new Uint8Array(9), 3, 3, { x: 1, y: 1, r: 1, label: 1 });
+    const bytes = exportSEG(painted, [3, 3, 1]);
+    const seg = importSEG(bytes);
+    expect(seg.dims).toEqual([3, 3, 1]);
+    expect(Array.from(seg.labelmap)).toEqual(Array.from(painted));
+    expect(seg.segments).toBeGreaterThan(0);
   });
 
   it("Mesh exports STL and GLB", async () => {
