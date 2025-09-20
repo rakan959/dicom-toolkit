@@ -1,67 +1,55 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.org/schemas/dicom-series-manifest.schema.json",
-    "title": "DicomSeriesManifest",
-    "type": "object",
-    "required": [
-        "studies"
-    ],
-    "properties": {
-        "studies": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/dicom-series-manifest.schema.json",
+  "title": "DicomSeriesManifest",
+  "type": "object",
+  "required": ["studies"],
+  "properties": {
+    "studies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["studyInstanceUID", "series"],
+        "properties": {
+          "studyInstanceUID": {
+            "type": "string"
+          },
+          "series": {
             "type": "array",
             "items": {
-                "type": "object",
-                "required": [
-                    "studyInstanceUID",
-                    "series"
-                ],
-                "properties": {
-                    "studyInstanceUID": {
+              "type": "object",
+              "required": ["seriesInstanceUID", "modality", "instances"],
+              "properties": {
+                "seriesInstanceUID": {
+                  "type": "string"
+                },
+                "modality": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "instances": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["sopInstanceUID", "frameCount"],
+                    "properties": {
+                      "sopInstanceUID": {
                         "type": "string"
-                    },
-                    "series": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "required": [
-                                "seriesInstanceUID",
-                                "modality",
-                                "instances"
-                            ],
-                            "properties": {
-                                "seriesInstanceUID": {
-                                    "type": "string"
-                                },
-                                "modality": {
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "type": "string"
-                                },
-                                "instances": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "required": [
-                                            "sopInstanceUID",
-                                            "frameCount"
-                                        ],
-                                        "properties": {
-                                            "sopInstanceUID": {
-                                                "type": "string"
-                                            },
-                                            "frameCount": {
-                                                "type": "integer",
-                                                "minimum": 1
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                      },
+                      "frameCount": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
                     }
+                  }
                 }
+              }
             }
+          }
         }
+      }
     }
+  }
 }

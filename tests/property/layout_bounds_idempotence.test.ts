@@ -17,7 +17,7 @@ describe("Layout - property", () => {
         // Out of bounds is ignored
         assignSeriesToViewport(api, count + 1, { studyInstanceUID: "X", seriesInstanceUID: "Y" });
         expect(getAssignments(api).length).toBe(count);
-      })
+      }),
     );
   });
 });

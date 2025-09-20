@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { createLayout, assignSeriesToViewport, getAssignments, enableDragRearrange } from "@ui/Layout";
+import {
+  createLayout,
+  assignSeriesToViewport,
+  getAssignments,
+  enableDragRearrange,
+} from "@ui/Layout";
 
 // A04-layout acceptance
 // @req: F-003
@@ -9,11 +14,15 @@ describe("Layout - acceptance", () => {
     const root = document.createElement("div");
     const api = createLayout(root, { rows: 2, cols: 2 });
     expect(root.querySelectorAll('[data-test="viewport"]').length).toBe(4);
-    const ids = Array.from(root.querySelectorAll('[data-test="viewport"]')).map((el) => (el as HTMLElement).dataset.viewportId);
+    const ids = Array.from(root.querySelectorAll('[data-test="viewport"]')).map(
+      (el) => (el as HTMLElement).dataset.viewportId,
+    );
     expect(ids).toEqual(["0", "1", "2", "3"]);
     // idempotent render
     api.render();
-    const ids2 = Array.from(root.querySelectorAll('[data-test="viewport"]')).map((el) => (el as HTMLElement).dataset.viewportId);
+    const ids2 = Array.from(root.querySelectorAll('[data-test="viewport"]')).map(
+      (el) => (el as HTMLElement).dataset.viewportId,
+    );
     expect(ids2).toEqual(ids);
   });
 
@@ -36,25 +45,33 @@ describe("Layout - acceptance", () => {
     const from = root.querySelector('[data-test="viewport"][data-viewport-id="0"]') as HTMLElement;
     const to = root.querySelector('[data-test="viewport"][data-viewport-id="1"]') as HTMLElement;
 
-  // Simulate drag-drop in jsdom: create generic Event and patch dataTransfer
+    // Simulate drag-drop in jsdom: create generic Event and patch dataTransfer
     const dragStartEv = document.createEvent("Event");
     dragStartEv.initEvent("dragstart", true, true);
     (dragStartEv as any).dataTransfer = {
       store: new Map<string, string>(),
-      setData(type: string, val: string) { this.store.set(type, val); },
-      getData(type: string) { return this.store.get(type) ?? ""; },
+      setData(type: string, val: string) {
+        this.store.set(type, val);
+      },
+      getData(type: string) {
+        return this.store.get(type) ?? "";
+      },
     } as any;
-  from.dispatchEvent(dragStartEv);
-  // attach source id on dataTransfer as our impl expects
+    from.dispatchEvent(dragStartEv);
+    // attach source id on dataTransfer as our impl expects
     const dropEv = document.createEvent("Event");
     dropEv.initEvent("drop", true, true);
     (dropEv as any).dataTransfer = {
       store: new Map<string, string>(),
-      setData(type: string, val: string) { this.store.set(type, val); },
-      getData(type: string) { return this.store.get(type) ?? ""; },
+      setData(type: string, val: string) {
+        this.store.set(type, val);
+      },
+      getData(type: string) {
+        return this.store.get(type) ?? "";
+      },
     } as any;
     (dropEv as any).dataTransfer.setData("text/plain", "0");
-  to.dispatchEvent(dropEv);
+    to.dispatchEvent(dropEv);
 
     const assigns = getAssignments(api);
     expect(assigns[0]).toEqual({ studyInstanceUID: "B", seriesInstanceUID: "S2" });

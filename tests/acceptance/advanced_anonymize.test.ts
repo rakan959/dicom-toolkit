@@ -7,6 +7,8 @@ describe("Advanced anonymizer", () => {
     // @req: S-003
     const a = new Anonymizer("advanced");
     const data = new Uint8Array([0, 1, 2, 3]);
-    expect(() => a.redactPixels(data, 2, 2, [{ x: 0, y: 0, w: 1, h: 1 }])).toThrowError(/NotImplemented/);
+    expect(() => a.redactPixels(data, 2, 2, [{ x: 0, y: 0, w: 1, h: 1 }])).toThrowError(
+      /NotImplemented/,
+    );
   });
 });

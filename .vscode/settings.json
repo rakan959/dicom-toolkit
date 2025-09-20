@@ -1,6 +1,6 @@
 {
-    "sonarlint.connectedMode.project": {
-        "connectionId": "rakan959",
-        "projectKey": "rakan959_dicom-toolkit2"
-    }
+  "sonarlint.connectedMode.project": {
+    "connectionId": "rakan959",
+    "projectKey": "rakan959_dicom-toolkit2"
+  }
 }

@@ -8,6 +8,21 @@ const base = process.env.GH_PAGES_BASE || "/";
 export default defineConfig({
   base,
   plugins: [react()],
+  build: {
+    // Enable library build so `vite build` does not require index.html
+    lib: {
+      entry: fileURLToPath(new URL("./src/index.ts", import.meta.url)),
+      name: "DicomToolkit",
+      formats: ["es", "cjs"],
+      fileName: (format) => (format === "es" ? "index.mjs" : "index.cjs"),
+    },
+    rollupOptions: {
+      // Keep deps external for library consumers
+      external: ["dcmjs", "jszip", "zod", "react", "react/jsx-runtime"],
+    },
+    sourcemap: true,
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       "@src": fileURLToPath(new URL("./src", import.meta.url)),

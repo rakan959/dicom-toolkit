@@ -3,17 +3,37 @@
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
     "format:check": "prettier -c .",
+    "prepare": "husky",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "mutation:quick": "stryker run --mutate 'src/**/*.ts' --timeoutFactor 1.5 --concurrency 2 --testRunner vitest --fileLogLevel error",
     "mutation": "stryker run",
     "check:reqs": "node tools/check_requirements.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md,yml,yaml,css,scss}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix --max-warnings 0"
+    ]
   },
   "dependencies": {
     "dcmjs": "^0.45.0",
@@ -34,8 +54,10 @@
     "eslint-plugin-import": "^2.32.0",
     "fast-check": "^4.3.0",
     "fast-glob": "^3.3.3",
+    "husky": "^9.1.7",
     "js-yaml": "^4.1.0",
     "jsdom": "^27.0.0",
+    "lint-staged": "^15.5.2",
     "prettier": "^3.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",

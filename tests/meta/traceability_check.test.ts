@@ -8,9 +8,7 @@ describe("Traceability invariant (@req: N-004)", () => {
   it("every requirement ID is referenced by at least one test file", () => {
     // @req: N-004
     const root = path.resolve(__dirname, "..", "..");
-    const reqDoc: any = yaml.load(
-      fs.readFileSync(path.join(root, "REQUIREMENTS.yml"), "utf8")
-    );
+    const reqDoc: any = yaml.load(fs.readFileSync(path.join(root, "REQUIREMENTS.yml"), "utf8"));
     const reqs: string[] = (reqDoc.requirements || []).map((r: any) => r.id);
     const files = fg.sync(["tests/**/*.test.ts", "tests/**/*.spec.ts"], {
       cwd: root,

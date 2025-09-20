@@ -1,69 +1,58 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.org/schemas/segmentation.schema.json",
-    "title": "SegmentationIO",
-    "type": "object",
-    "properties": {
-        "segments": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/segmentation.schema.json",
+  "title": "SegmentationIO",
+  "type": "object",
+  "properties": {
+    "segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "color", "voxels"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "color": {
             "type": "array",
             "items": {
-                "type": "object",
-                "required": [
-                    "id",
-                    "label",
-                    "color",
-                    "voxels"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "label": {
-                        "type": "string"
-                    },
-                    "color": {
-                        "type": "array",
-                        "items": {
-                            "type": "number"
-                        },
-                        "minItems": 3,
-                        "maxItems": 4
-                    },
-                    "voxels": {
-                        "type": "object",
-                        "required": [
-                            "dims",
-                            "spacing",
-                            "data"
-                        ],
-                        "properties": {
-                            "dims": {
-                                "type": "array",
-                                "items": {
-                                    "type": "integer"
-                                },
-                                "minItems": 3,
-                                "maxItems": 3
-                            },
-                            "spacing": {
-                                "type": "array",
-                                "items": {
-                                    "type": "number"
-                                },
-                                "minItems": 3,
-                                "maxItems": 3
-                            },
-                            "data": {
-                                "type": "string",
-                                "contentEncoding": "base64"
-                            }
-                        }
-                    }
-                }
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 4
+          },
+          "voxels": {
+            "type": "object",
+            "required": ["dims", "spacing", "data"],
+            "properties": {
+              "dims": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "spacing": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "data": {
+                "type": "string",
+                "contentEncoding": "base64"
+              }
             }
+          }
         }
-    },
-    "required": [
-        "segments"
-    ]
+      }
+    }
+  },
+  "required": ["segments"]
 }

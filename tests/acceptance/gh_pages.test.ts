@@ -19,8 +19,8 @@ describe("GH Pages deploy", () => {
     // Ensure it uploads artifact and deploys pages
     expect(yml).toMatch(/upload-pages-artifact/i);
     expect(yml).toMatch(/deploy-pages/i);
-  // Ensure GH_PAGES_BASE is passed to vite build step
-  expect(yml).toMatch(/GH_PAGES_BASE:\s*['"]?\/.+\/['"]?/);
+    // Ensure GH_PAGES_BASE is passed to vite build step
+    expect(yml).toMatch(/GH_PAGES_BASE:\s*['"]?\/.+\/['"]?/);
 
     // Vite config must honor GH_PAGES_BASE
     const viteCfg = fs.readFileSync(path.join(root, "vite.config.ts"), "utf8");

@@ -12,7 +12,10 @@ export interface VideoOptions {
   allowPHIOverlays: false;
 }
 
-export async function exportVideo(_frames: ImageData[], _options: VideoOptions): Promise<Uint8Array> {
+export async function exportVideo(
+  _frames: ImageData[],
+  _options: VideoOptions,
+): Promise<Uint8Array> {
   // @req: F-012
   // @req: F-013
   throw new Error("NotImplemented: exportVideo");

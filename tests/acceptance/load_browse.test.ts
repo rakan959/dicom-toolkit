@@ -8,7 +8,7 @@ describe("Load & Browse", () => {
     // @req: F-015
     // @req: F-005
     // Provide a non-DICOM file and ensure the function does not throw.
-    const files = [new File([new Uint8Array([1,2,3])], "notdicom.bin")];
+    const files = [new File([new Uint8Array([1, 2, 3])], "notdicom.bin")];
     const manifest = await buildManifestFromFiles(files);
     expect(Array.isArray(manifest)).toBe(true);
   });
@@ -27,10 +27,14 @@ describe("Load & Browse", () => {
     // Then we have one study (A) with two series (S1,S2)
     expect(manifest.length).toBe(1);
     expect(manifest[0].studyInstanceUID).toBe("A");
-  const seriesUIDs = manifest[0].series.map((s) => s.seriesInstanceUID).sort((a,b)=>a.localeCompare(b));
+    const seriesUIDs = manifest[0].series
+      .map((s) => s.seriesInstanceUID)
+      .sort((a, b) => a.localeCompare(b));
     expect(seriesUIDs).toEqual(["S1", "S2"]);
     const s1 = manifest[0].series.find((s) => s.seriesInstanceUID === "S1")!;
-  expect(s1.sopInstances.map((i) => i.sopInstanceUID).sort((a,b)=>a.localeCompare(b))).toEqual(["I1", "I2"]);
+    expect(s1.sopInstances.map((i) => i.sopInstanceUID).sort((a, b) => a.localeCompare(b))).toEqual(
+      ["I1", "I2"],
+    );
   });
 
   it("does not perform network requests while building manifest (offline)", async () => {
@@ -39,13 +43,13 @@ describe("Load & Browse", () => {
     const spy = vi.fn(() => {
       throw new Error("Network call forbidden in buildManifestFromFiles");
     });
-  (globalThis as any).fetch = spy;
+    (globalThis as any).fetch = spy;
     try {
       const files = [new File([new Uint8Array([0])], "study-A_series-S1_inst-I1.dcm")];
       await buildManifestFromFiles(files);
       expect(spy).not.toHaveBeenCalled();
     } finally {
-  (globalThis as any).fetch = originalFetch!;
+      (globalThis as any).fetch = originalFetch!;
     }
   });
 
@@ -95,8 +99,18 @@ describe("Load & Browse", () => {
       {
         studyInstanceUID: "A",
         series: [
-          { seriesInstanceUID: "S1", sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }], modality: "OT", description: "Series 1" },
-          { seriesInstanceUID: "S2", sopInstances: [{ sopInstanceUID: "J1", frameCount: 1 }], modality: "OT", description: "Series 2" },
+          {
+            seriesInstanceUID: "S1",
+            sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }],
+            modality: "OT",
+            description: "Series 1",
+          },
+          {
+            seriesInstanceUID: "S2",
+            sopInstances: [{ sopInstanceUID: "J1", frameCount: 1 }],
+            modality: "OT",
+            description: "Series 2",
+          },
         ],
       },
     ];
@@ -137,7 +151,11 @@ describe("Load & Browse", () => {
       {
         studyInstanceUID: "A",
         series: [
-          { seriesInstanceUID: "S1", sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }], modality: "OT" },
+          {
+            seriesInstanceUID: "S1",
+            sopInstances: [{ sopInstanceUID: "I1", frameCount: 1 }],
+            modality: "OT",
+          },
         ],
       },
     ];

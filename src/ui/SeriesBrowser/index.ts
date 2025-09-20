@@ -34,7 +34,10 @@ export function renderSeriesBrowser(
   const canonicalStudySig = (st: Study) => {
     const seriesSigs = st.series
       .map((se) => {
-        const inst = se.sopInstances.map((i) => i.sopInstanceUID).sort(byAsc).join("~");
+        const inst = se.sopInstances
+          .map((i) => i.sopInstanceUID)
+          .sort(byAsc)
+          .join("~");
         return `${se.seriesInstanceUID}#${inst}`;
       })
       .sort(byAsc)
@@ -53,7 +56,10 @@ export function renderSeriesBrowser(
 
     const ul = document.createElement("ul");
     const seriesKey = (se: Study["series"][number]) => {
-      const inst = se.sopInstances.map((i) => i.sopInstanceUID).sort(byAsc).join("~");
+      const inst = se.sopInstances
+        .map((i) => i.sopInstanceUID)
+        .sort(byAsc)
+        .join("~");
       return `${se.seriesInstanceUID}#${inst}`;
     };
     const series = [...st.series].sort((a, b) => byAsc(seriesKey(a), seriesKey(b)));
@@ -76,33 +82,33 @@ export function renderSeriesBrowser(
       };
 
       actions.appendChild(
-        mkBtn("Rename", "action-rename", () => cb.onRename?.(st.studyInstanceUID, se.seriesInstanceUID)),
-      );
-      actions.appendChild(
-        mkBtn("Remove", "action-remove", () => cb.onRemove?.(st.studyInstanceUID, se.seriesInstanceUID)),
-      );
-      actions.appendChild(
-        mkBtn("Export", "action-export", () => cb.onExport?.(st.studyInstanceUID, se.seriesInstanceUID)),
-      );
-      actions.appendChild(
-        mkBtn(
-          "Export Anonymized",
-          "action-export-anon",
-          () => cb.onExportAnonymized?.(st.studyInstanceUID, se.seriesInstanceUID),
+        mkBtn("Rename", "action-rename", () =>
+          cb.onRename?.(st.studyInstanceUID, se.seriesInstanceUID),
         ),
       );
       actions.appendChild(
-        mkBtn(
-          "Export Video",
-          "action-export-video",
-          () => cb.onExportVideo?.(st.studyInstanceUID, se.seriesInstanceUID),
+        mkBtn("Remove", "action-remove", () =>
+          cb.onRemove?.(st.studyInstanceUID, se.seriesInstanceUID),
         ),
       );
       actions.appendChild(
-        mkBtn(
-          "Advanced Anonymize…",
-          "action-advanced-anon",
-          () => cb.onRouteToAdvancedAnonymize?.(st.studyInstanceUID, se.seriesInstanceUID),
+        mkBtn("Export", "action-export", () =>
+          cb.onExport?.(st.studyInstanceUID, se.seriesInstanceUID),
+        ),
+      );
+      actions.appendChild(
+        mkBtn("Export Anonymized", "action-export-anon", () =>
+          cb.onExportAnonymized?.(st.studyInstanceUID, se.seriesInstanceUID),
+        ),
+      );
+      actions.appendChild(
+        mkBtn("Export Video", "action-export-video", () =>
+          cb.onExportVideo?.(st.studyInstanceUID, se.seriesInstanceUID),
+        ),
+      );
+      actions.appendChild(
+        mkBtn("Advanced Anonymize…", "action-advanced-anon", () =>
+          cb.onRouteToAdvancedAnonymize?.(st.studyInstanceUID, se.seriesInstanceUID),
         ),
       );
 

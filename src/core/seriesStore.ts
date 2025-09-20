@@ -107,7 +107,7 @@ export function sortInstancesStable<T>(instances: T[]): T[] {
   if (typeof a0 === "number") {
     return (arr as unknown as number[]).slice().sort((a, b) => a - b) as unknown as T[];
   }
-  if (typeof a0 === "object" && a0 && typeof (a0).instanceNumber === "number") {
+  if (typeof a0 === "object" && a0 && typeof a0.instanceNumber === "number") {
     return arr.sort((a: any, b: any) => a.instanceNumber - b.instanceNumber);
   }
   return arr; // unknown shape: no-op but stable

@@ -63,10 +63,14 @@ function renderGrid(root: HTMLElement, rows: number, cols: number, assigns: (Ser
   root.appendChild(container);
 }
 
-export function assignSeriesToViewport(api: LayoutAPI, viewportId: ViewportId, ref: SeriesRef): void {
+export function assignSeriesToViewport(
+  api: LayoutAPI,
+  viewportId: ViewportId,
+  ref: SeriesRef,
+): void {
   if (viewportId < 0 || viewportId >= api._assignments.length) {
     console.warn(
-      `assignSeriesToViewport: Invalid viewportId (${viewportId}) provided. Valid range is 0 to ${api._assignments.length - 1}.`
+      `assignSeriesToViewport: Invalid viewportId (${viewportId}) provided. Valid range is 0 to ${api._assignments.length - 1}.`,
     );
     return;
   }
@@ -105,9 +109,9 @@ export function enableDragRearrange(api: LayoutAPI): void {
     });
     el.addEventListener("drop", (ev) => {
       ev.preventDefault();
-  const fromStr = ev.dataTransfer?.getData("text/plain");
-  const from = fromStr ? Number(fromStr) : NaN;
-  const to = Number(el.getAttribute("data-viewport-id") ?? "NaN");
+      const fromStr = ev.dataTransfer?.getData("text/plain");
+      const from = fromStr ? Number(fromStr) : NaN;
+      const to = Number(el.getAttribute("data-viewport-id") ?? "NaN");
       if (!Number.isNaN(from) && !Number.isNaN(to)) {
         if (from === to) return; // no-op on self-drop
         swapViewports(api, from, to);

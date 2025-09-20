@@ -1,82 +1,63 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.org/schemas/anonymizer.schema.json",
-    "title": "AnonymizerConfig",
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-        "mode": {
-            "type": "string",
-            "enum": [
-                "simple",
-                "advanced"
-            ],
-            "description": "Simple skips burned-in PHI frames; Advanced allows redaction."
-        },
-        "customTagOverrides": {
-            "type": "object",
-            "additionalProperties": {
-                "type": [
-                    "string",
-                    "number",
-                    "boolean",
-                    "null"
-                ]
-            },
-            "description": "Explicit tag values overriding anonymization. Keys as DICOM keywords or (gggg,eeee) hex."
-        },
-        "redactions": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/anonymizer.schema.json",
+  "title": "AnonymizerConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["simple", "advanced"],
+      "description": "Simple skips burned-in PHI frames; Advanced allows redaction."
+    },
+    "customTagOverrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      },
+      "description": "Explicit tag values overriding anonymization. Keys as DICOM keywords or (gggg,eeee) hex."
+    },
+    "redactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sopInstanceUID", "rectangles"],
+        "properties": {
+          "sopInstanceUID": {
+            "type": "string"
+          },
+          "rectangles": {
             "type": "array",
             "items": {
-                "type": "object",
-                "required": [
-                    "sopInstanceUID",
-                    "rectangles"
-                ],
-                "properties": {
-                    "sopInstanceUID": {
-                        "type": "string"
-                    },
-                    "rectangles": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "required": [
-                                "x",
-                                "y",
-                                "w",
-                                "h"
-                            ],
-                            "properties": {
-                                "x": {
-                                    "type": "integer",
-                                    "minimum": 0
-                                },
-                                "y": {
-                                    "type": "integer",
-                                    "minimum": 0
-                                },
-                                "w": {
-                                    "type": "integer",
-                                    "minimum": 1
-                                },
-                                "h": {
-                                    "type": "integer",
-                                    "minimum": 1
-                                }
-                            }
-                        }
-                    }
+              "type": "object",
+              "required": ["x", "y", "w", "h"],
+              "properties": {
+                "x": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "y": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "w": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "h": {
+                  "type": "integer",
+                  "minimum": 1
                 }
+              }
             }
-        },
-        "dropBurnedInPHIInSimple": {
-            "type": "boolean",
-            "const": true
+          }
         }
+      }
     },
-    "required": [
-        "mode",
-        "dropBurnedInPHIInSimple"
-    ]
+    "dropBurnedInPHIInSimple": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "required": ["mode", "dropBurnedInPHIInSimple"]
 }

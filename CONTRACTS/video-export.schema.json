@@ -1,81 +1,70 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.org/schemas/video-export.schema.json",
-    "title": "VideoExportOptions",
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-        "target": {
-            "type": "string",
-            "enum": [
-                "series",
-                "layout"
-            ]
-        },
-        "codec": {
-            "type": "string",
-            "enum": [
-                "h264",
-                "av1",
-                "vp9"
-            ]
-        },
-        "container": {
-            "type": "string",
-            "enum": [
-                "mkv",
-                "mp4",
-                "webm"
-            ]
-        },
-        "fps": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 120
-        },
-        "width": {
-            "type": "integer",
-            "minimum": 1
-        },
-        "height": {
-            "type": "integer",
-            "minimum": 1
-        },
-        "quality": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-        },
-        "includeOverlays": {
-            "type": "boolean"
-        },
-        "includeAnnotations": {
-            "type": "boolean"
-        },
-        "allowPHIOverlays": {
-            "type": "boolean",
-            "const": false
-        }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/video-export.schema.json",
+  "title": "VideoExportOptions",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "target": {
+      "type": "string",
+      "enum": ["series", "layout"]
     },
-    "required": [
-        "target",
-        "codec",
-        "container",
-        "fps",
-        "includeOverlays",
-        "includeAnnotations",
-        "allowPHIOverlays"
-    ],
-    "examples": [
-        {
-            "target": "layout",
-            "codec": "h264",
-            "container": "mkv",
-            "fps": 30,
-            "quality": 1.0,
-            "includeOverlays": false,
-            "includeAnnotations": false,
-            "allowPHIOverlays": false
-        }
-    ]
+    "codec": {
+      "type": "string",
+      "enum": ["h264", "av1", "vp9"]
+    },
+    "container": {
+      "type": "string",
+      "enum": ["mkv", "mp4", "webm"]
+    },
+    "fps": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 120
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "quality": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "includeOverlays": {
+      "type": "boolean"
+    },
+    "includeAnnotations": {
+      "type": "boolean"
+    },
+    "allowPHIOverlays": {
+      "type": "boolean",
+      "const": false
+    }
+  },
+  "required": [
+    "target",
+    "codec",
+    "container",
+    "fps",
+    "includeOverlays",
+    "includeAnnotations",
+    "allowPHIOverlays"
+  ],
+  "examples": [
+    {
+      "target": "layout",
+      "codec": "h264",
+      "container": "mkv",
+      "fps": 30,
+      "quality": 1.0,
+      "includeOverlays": false,
+      "includeAnnotations": false,
+      "allowPHIOverlays": false
+    }
+  ]
 }

@@ -18,11 +18,14 @@ describe("Manifest grouping invariants", () => {
             series: fc.string({ minLength: 1, maxLength: 3 }),
             inst: fc.string({ minLength: 1, maxLength: 3 }),
           }),
-          { minLength: 1, maxLength: 10 }
+          { minLength: 1, maxLength: 10 },
         ),
         async (triples) => {
           const files = triples.map(mkFile);
-          const shuffled = fc.sample(fc.shuffledSubarray(files, { minLength: files.length, maxLength: files.length }), 1)[0]!;
+          const shuffled = fc.sample(
+            fc.shuffledSubarray(files, { minLength: files.length, maxLength: files.length }),
+            1,
+          )[0]!;
           const m1 = await buildManifestFromFiles(files);
           const m2 = await buildManifestFromFiles(shuffled);
           // Compare as multisets of (study, series, inst)
@@ -38,8 +41,8 @@ describe("Manifest grouping invariants", () => {
             return out;
           };
           expect(new Set(flat(m1))).toEqual(new Set(flat(m2)));
-        }
-      )
+        },
+      ),
     );
   });
 });

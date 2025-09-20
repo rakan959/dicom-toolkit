@@ -8,7 +8,6 @@ meta:
   license: MIT
 
 requirements:
-
   - id: F-001
     text: The app shall run entirely client-side in a browser with no network requests after initial load.
     rationale: Offline, privacy-first.
