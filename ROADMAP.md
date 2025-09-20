@@ -15,7 +15,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | id  | title                                                  | status | priority | size | risk | depends_on | requirements                     | artifacts_to_touch                                                 | acceptance_tests | properties             |
 | --- | ------------------------------------------------------ | ------ | -------- | ---- | ---- | ----------- | -------------------------------- | -------------------------------------------------------------------- | ----------------- | ---------------------- |
 | T01 | Init repo, CI, lint, types, coverage, mutation (quick) | done   | 1        | S    | M    | []         | [N-001,N-002,N-003,N-004,F-002] | package.json, tsconfig.json, vitest.config.ts, .github/workflows/*  | A00-CI-smoke      | P00-traceability       |
-| T02 | Series import: file/dir/zip parsing & manifest         | todo   | 1        | M    | M    | [T01]      | [F-001,F-015]                   | src/core/seriesStore.ts, CONTRACTS/dicom-series-manifest.schema.json | A01-load-browse   | M01-permute-order      |
+| T02 | Series import: file/dir/zip parsing & manifest         | done   | 1        | M    | M    | [T01]      | [F-001,F-015]                   | src/core/seriesStore.ts, CONTRACTS/dicom-series-manifest.schema.json | A01-load-browse   | M01-permute-order      |
 | T03 | Simple anonymizer pipeline                             | todo   | 1        | M    | M    | [T02]      | [F-006,S-001,S-002]             | src/core/anonymizer.ts                                               | A02-simple-anon   | P01-rng-map            |
 | T04 | Series browser UI + context menus                      | todo   | 2        | M    | M    | [T02]      | [F-005,F-014]                   | src/ui/SeriesBrowser/*                                              | A01-load-browse   | —                      |
 | T05 | Advanced anonymizer (preview, redaction, overrides)    | todo   | 2        | M    | H    | [T03,T04]  | [F-007,S-003]                   | src/core/anonymizer.ts, src/ui/AnonymizerAdvanced/*                 | A03-advanced-anon | P02-redaction          |
@@ -44,7 +44,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T02
   title: Series import: file/dir/zip parsing & manifest
-  status: todo
+  status: done
   priority: 1
   size: M
   risk: M
