@@ -164,13 +164,25 @@ properties: [P03-mpr-roundtrip]
 
 - id: T10a
   title: Replace SEG placeholder with real DICOM SEG using dcmjs
-  status: todo
+  status: done
   priority: 3
   size: S
   risk: M
   depends_on: [T10]
   requirements: [F-010]
   artifacts_to_touch: [src/core/segmentation.ts, CONTRACTS/segmentation.schema.json]
+  acceptance_tests: [A08-seg-io]
+  properties: [P04-seg-spatial]
+
+- id: T10b
+  title: Build full DICOM SEG dataset with dcmjs (uses SeriesInstanceUID/FrameOfReference)
+  status: todo
+  priority: 3
+  size: M
+  risk: M
+  depends_on: [T10a]
+  requirements: [F-010]
+  artifacts_to_touch: [src/core/segmentation.ts]
   acceptance_tests: [A08-seg-io]
   properties: [P04-seg-spatial]
 

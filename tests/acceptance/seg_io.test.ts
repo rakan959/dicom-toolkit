@@ -15,6 +15,10 @@ describe("SEG import/export - acceptance (A08-seg-io)", () => {
       d = 1 as const;
     const lm = makeLabelmap(w, h, [0, 1, 0, 2]);
     const bytes = exportSEG(lm, [w, h, d]);
+    // Expect DICOM Part 10 file: 128-byte preamble + 'DICM' magic
+    expect(bytes.length).toBeGreaterThan(132);
+    const magic = String.fromCharCode(bytes[128], bytes[129], bytes[130], bytes[131]);
+    expect(magic).toBe("DICM");
     const seg = importSEG(bytes);
     expect(seg.segments).toBe(2);
     expect(seg.dims).toEqual([w, h, d]);
