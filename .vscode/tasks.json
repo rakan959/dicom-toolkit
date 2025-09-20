@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "test:vitest",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"coverage"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$vitest - default"
+			],
+			"group": "build"
+		}
+	]
+}

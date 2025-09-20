@@ -24,6 +24,8 @@ jobs:
           node-version: 20
       - run: npm ci
       - name: Build
+        env:
+          GH_PAGES_BASE: "/${{ github.event.repository.name }}/"
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

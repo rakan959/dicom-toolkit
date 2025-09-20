@@ -26,7 +26,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T10 | DICOM SEG import/export                                | todo   | 3        | M    | H    | [T09]      | [F-010]                         | src/core/segmentation.ts                                             | A08-seg-io        | P04-seg-spatial        |
 | T11 | Mesh generation + STL/GLB export                       | todo   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
 | T12 | Video export (H.264 MKV default)                       | todo   | 4        | M    | M    | [T06]      | [F-012,F-013]                   | src/core/video/exporter.ts                                           | A10-video         | M03-layout-permutation |
-| T13 | GH Pages deploy workflow                               | todo   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
+| T13 | GH Pages deploy workflow                               | done   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
 
 ### Task YAML (agent-friendly)
 
@@ -176,7 +176,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T13
   title: GH Pages deploy workflow
-  status: todo
+  status: done
   priority: 1
   size: XS
   risk: L
