@@ -90,6 +90,18 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
   acceptance_tests: [A01-load-browse]
   properties: []
 
+- id: U01
+  title: UI theme toggle tests (property + metamorphic) for idempotence and system-pref fallback
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T01]
+  requirements: [F-101]
+  artifacts_to_touch: [tests/property/ui_theme_idempotence_property.test.tsx, tests/metamorphic/ui_theme_pref_metamorphic.test.tsx]
+  acceptance_tests: [A12-ui-theme]
+  properties: []
+
 - id: T22
   title: Traceability inverse check (no unknown @req IDs)
   status: done
@@ -339,5 +351,19 @@ properties: [P03-mpr-roundtrip]
   depends_on: [T01]
   requirements: [N-004]
   artifacts_to_touch: [tests/meta/requirements_format.test.ts]
+  acceptance_tests: [A00-CI-smoke]
+  properties: []
+
+## Task YAML (agent-friendly) — Unblockers
+
+- id: T24
+  title: Enforce vitest coverage "all: true" guard via meta test
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T01]
+  requirements: [N-002]
+  artifacts_to_touch: [tests/meta/coverage_all_flag.test.ts]
   acceptance_tests: [A00-CI-smoke]
   properties: []
