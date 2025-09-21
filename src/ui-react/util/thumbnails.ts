@@ -50,7 +50,7 @@ export function setupThumbObserver(
         const renderBatch = () => {
           const end = Math.min(idx + BATCH_SIZE, items.length);
           for (; idx < end; idx++) {
-            const el = items[idx]!;
+            const el = items[idx];
             const uid = el.getAttribute("data-uid");
             if (!uid) continue;
             const canvas = document.createElement("canvas");
@@ -75,11 +75,7 @@ export function setupThumbObserver(
 // Real renderer using dcmjs + representative file registry
 import dcmjs from "dcmjs";
 import { showNotification } from "@src/ui-react/util/notify";
-import {
-  getRepresentativeFileForSeries,
-  type RepRegistry,
-  getRepresentativeFileForSeriesScoped,
-} from "@core/seriesStore";
+import { type RepRegistry, getRepresentativeFileForSeriesScoped } from "@core/seriesStore";
 import {
   tryDecodePixelData,
   ensureDefaultDecodersRegistered,
@@ -472,7 +468,7 @@ export async function renderThumbFromDICOM(
     } else {
       const file = opts?.repRegistry
         ? getRepresentativeFileForSeriesScoped(opts.repRegistry, studyUID, seriesUID)
-        : getRepresentativeFileForSeries(studyUID, seriesUID);
+        : undefined;
       if (!file) {
         drawFallback(seriesUID, canvas);
         return;

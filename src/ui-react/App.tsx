@@ -16,6 +16,7 @@ import { decodeLayoutState, updateHashForLayout } from "@ui/hashState";
 import "./app.css";
 import { RepRegistryProvider } from "./context/RepRegistryContext";
 import { ToastProvider, useToast } from "./components/ToastProvider";
+import { showNotification } from "@src/ui-react/util/notify";
 
 const DEMO_MANIFEST: Study[] = [
   {
@@ -42,6 +43,7 @@ function AppInner() {
   const [repRegistry, setRepRegistry] = useState<RepRegistry | null>(null);
   const [rows, setRows] = useState(1);
   const [cols, setCols] = useState(2);
+  const [maxEntryBytes, setMaxEntryBytes] = useState<number | undefined>(undefined);
   const layoutRootRef = useRef<HTMLDivElement>(null);
   const layoutApiRef = useRef<LayoutAPI | null>(null);
   const activeViewportRef = useRef<number>(0);
@@ -176,7 +178,25 @@ function AppInner() {
 
   async function handleFiles(files: File[]) {
     // Prefer scoped registry to avoid cross-session leakage
-    const { manifest: m, repRegistry: rep } = await buildManifestWithRegistry(files);
+    const { manifest: m, repRegistry: rep, stats } = await buildManifestWithRegistry(files);
+    const title = `Import complete: ${stats.series} series / ${stats.instances} instances from ${stats.acceptedFiles}/${stats.inputFiles} files`;
+    console.info(title);
+    console.table({
+      inputFiles: stats.inputFiles,
+      acceptedFiles: stats.acceptedFiles,
+      skippedFiles: stats.skippedFiles,
+      studies: stats.studies,
+      series: stats.series,
+      instances: stats.instances,
+    });
+    try {
+      showNotification(
+        stats.series > 0
+          ? title
+          : `No valid DICOM series found in ${stats.inputFiles} selected file(s).`,
+        stats.series > 0 ? "success" : "warning",
+      );
+    } catch {}
     setManifest(m);
     setRepRegistry(rep);
   }
@@ -184,8 +204,24 @@ function AppInner() {
   return (
     <div className="app-grid">
       <header className="dropbar">
-        <DropBar onFiles={handleFiles} />
+        <DropBar onFiles={handleFiles} maxEntryBytes={maxEntryBytes} />
         <div className="layout-controls">
+          <label style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <span>Max ZIP entry bytes:</span>
+            <input
+              type="number"
+              min={0}
+              step={1024 * 1024}
+              placeholder="unlimited"
+              value={typeof maxEntryBytes === "number" ? maxEntryBytes : ""}
+              onChange={(e) => {
+                const v = Number(e.currentTarget.value);
+                setMaxEntryBytes(Number.isFinite(v) && v > 0 ? v : undefined);
+              }}
+              style={{ width: 160 }}
+              aria-label="Max ZIP entry bytes"
+            />
+          </label>
           <LayoutPicker
             rows={rows}
             cols={cols}

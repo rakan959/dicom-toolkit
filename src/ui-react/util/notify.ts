@@ -10,12 +10,12 @@ export function showNotification(message: string, variant: NotifyVariant = "info
     toastApi.notify(message, variant);
     return;
   }
-   
+
   if (typeof window !== "undefined" && typeof (window as any).alert === "function") {
     window.alert(message);
     return;
   }
   // As a fallback in tests or non-browser env
-   
+
   console.log(`NOTICE${variant !== "info" ? `(${variant})` : ""}:`, message);
 }

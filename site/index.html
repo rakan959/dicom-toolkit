@@ -22,7 +22,17 @@
           if (theme === "dark") root.classList.add("dark");
           else root.classList.remove("dark");
         } catch (e) {
-          // no-op
+          // Fallback to light theme and log the error
+          try {
+            document.documentElement.classList.remove("dark");
+          } catch (err) {
+            if (typeof console !== "undefined" && console.debug) {
+              console.debug("Failed to remove 'dark' class during theme fallback:", err);
+            }
+          }
+          if (typeof console !== "undefined" && console.warn) {
+            console.warn("Theme bootstrap failed:", e);
+          }
         }
       })();
     </script>
