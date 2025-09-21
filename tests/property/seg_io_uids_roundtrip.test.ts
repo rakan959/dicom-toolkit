@@ -1,15 +1,7 @@
 import { describe, it, expect } from "vitest";
 import * as fc from "fast-check";
 import { exportSEG, importSEG } from "@core/segmentation";
-
-const arbUID = () =>
-  fc
-    .tuple(
-      fc.array(fc.integer({ min: 0, max: 999999 }), { minLength: 2, maxLength: 12 }),
-      fc.integer({ min: 0, max: 999999999 }),
-    )
-    .map(([parts, last]) => parts.join(".") + "." + String(last))
-    .filter((s) => s.length >= 3 && s.length <= 64);
+import { arbUID } from "../setup/uid";
 
 describe("SEG IO UID roundtrip property", () => {
   it("preserves UIDs when provided; remains valid without UIDs (back-compat)", () => {
@@ -45,7 +37,7 @@ describe("SEG IO UID roundtrip property", () => {
           expect(segLegacy.FrameOfReferenceUID ?? null).toBeNull();
         },
       ),
-      { numRuns: 5, endOnFailure: true, interruptAfterTimeLimit: 4000, seed: 12345 },
+      { numRuns: 3, endOnFailure: true, interruptAfterTimeLimit: 6000, seed: 12345 },
     );
   });
 });

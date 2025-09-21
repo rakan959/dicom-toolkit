@@ -90,6 +90,66 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
   acceptance_tests: [A01-load-browse]
   properties: []
 
+- id: T16
+  title: Extract deterministic UID generator for tests
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T15]
+  requirements: [F-010]
+  artifacts_to_touch: [tests/setup/uid.ts, tests/property/seg_io_uids_roundtrip.test.ts]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: T17
+  title: SEG IO error-case tests (invalid input & size mismatches)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T15]
+  requirements: [F-010]
+  artifacts_to_touch: [tests/property/seg_io_errors.test.ts]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: T18
+  title: SEG legacy JSON import (no preamble) test
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T15]
+  requirements: [F-010]
+  artifacts_to_touch: [tests/acceptance/seg_io_legacy_import.test.ts]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: T19
+  title: SPEC note for SEG-MIN-1 transitional container
+  status: done
+  priority: 2
+  size: XS
+  risk: L
+  depends_on: [T18]
+  requirements: [F-010]
+  artifacts_to_touch: [SPEC.md]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: T20
+  title: Refactor any remaining UID generators to shared utility (noop if none)
+  status: todo
+  priority: 3
+  size: XS
+  risk: L
+  depends_on: [T16]
+  requirements: [F-010]
+  artifacts_to_touch: [tests/**]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
 - id: T05
   title: Advanced anonymizer (preview, redaction, overrides)
   status: done
@@ -236,7 +296,7 @@ properties: [P03-mpr-roundtrip]
 
 - id: T15
   title: Stabilize SEG IO UID roundtrip property test (timeout fix)
-  status: todo
+  status: done
   priority: 1
   size: XS
   risk: L
