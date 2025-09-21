@@ -60,7 +60,7 @@ function parseIdsFromName(
   // Extended heuristic: optional `_frames-<N>` and `_mod-<XX>` suffixes before .dcm
   // Allow files without an extension by making the .dcm suffix optional.
   const re =
-    /study-([A-Z0-9._]+)_series-([A-Z0-9._]+)_inst-([A-Z0-9._]+)(?:_frames-(\d+))?(?:_mod-([A-Z0-9]+))?(?:\.dcm)?$/i;
+    /study-([A-Z0-9._]+)_series-([A-Z0-9._]+)_inst-([A-Z0-9._]+?)(?=(?:_frames-\d+)?(?:_mod-[A-Z0-9]+)?(?:\.dcm)?$)(?:_frames-(\d+))?(?:_mod-([A-Z0-9]+))?(?:\.dcm)?$/i;
   const m = re.exec(name);
   if (!m) return null;
   const frames = m[4] ? Math.max(1, parseInt(m[4], 10)) : undefined;

@@ -42,9 +42,12 @@ export function DropBar({
             })) {
               if ("skip" in item) continue;
               const base = item.name.split("/").pop() || item.name;
-              const ab = new ArrayBuffer(item.bytes.byteLength);
-              new Uint8Array(ab).set(item.bytes);
-              expanded.push(new File([ab], base, { type: "application/octet-stream" }));
+              // No extra copy: File can be constructed directly from the Uint8Array
+              expanded.push(
+                new File([item.bytes as unknown as BlobPart], base, {
+                  type: "application/octet-stream",
+                }),
+              );
             }
           } else {
             expanded.push(f);
@@ -53,9 +56,14 @@ export function DropBar({
         onFiles(expanded);
         // App will compute accepted vs total and show a toast; keep local UI neutral.
         setMsg(`Processed ${expanded.length} file(s)`);
-      } catch (e) {
+      } catch (e: any) {
         console.warn(e);
-        const errMsg = "Failed to import some files. See console.";
+        const isNotReadable =
+          String(e?.name ?? e).includes("NotReadableError") ||
+          String(e?.message ?? e).includes("NotReadableError");
+        const errMsg = isNotReadable
+          ? "The selected ZIP could not be read. For very large files, copy to a local disk and retry."
+          : "Failed to import some files. See console.";
         setMsg(errMsg);
         try {
           showNotification(errMsg, "error");
@@ -64,7 +72,7 @@ export function DropBar({
         setBusy(false);
       }
     },
-    [onFiles],
+    [onFiles, maxEntryBytes],
   );
 
   return (

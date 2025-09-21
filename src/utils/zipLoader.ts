@@ -43,7 +43,7 @@ export async function normalizeToZipSource(item: File | Blob | any): Promise<Blo
 
 function createUnzipWorker(): Worker {
   // Use a relative path so bundlers resolve the worker correctly
-   
+
   // @ts-ignore
   const worker = new Worker(new URL("../workers/unzip.worker.ts", import.meta.url), {
     type: "module",
