@@ -1,5 +1,6 @@
 import { renderSeriesBrowser } from "../src/ui/SeriesBrowser";
-import { createLayout, assignSeriesToViewport } from "../src/ui/Layout";
+import { createLayout, assignSeriesToViewport, getAssignments } from "../src/ui/Layout";
+import { decodeLayoutState, updateHashForLayout } from "../src/ui/hashState";
 import type { Study } from "../src/types";
 import JSZip from "jszip";
 import { buildManifestFromFiles } from "../src/core/seriesStore";
@@ -136,7 +137,37 @@ root.appendChild(dropZone);
 
 const layoutRoot = document.createElement("div");
 layoutRoot.setAttribute("data-test", "layout-root");
-const api = createLayout(layoutRoot, { rows: 1, cols: 2 });
-assignSeriesToViewport(api, 0, { studyInstanceUID: "A", seriesInstanceUID: "S1" });
-assignSeriesToViewport(api, 1, { studyInstanceUID: "A", seriesInstanceUID: "S2" });
+
+// Initialize layout from hash if available, else use demo defaults
+const parsed = decodeLayoutState(window.location.hash);
+const rows = parsed?.r ?? 1;
+const cols = parsed?.c ?? 2;
+const api = createLayout(layoutRoot, { rows, cols });
 root.appendChild(layoutRoot);
+
+// Apply any parsed assignments (clamped by current grid)
+if (parsed?.a?.length) {
+  const max = Math.min(parsed.a.length, api.rows * api.cols);
+  for (let i = 0; i < max; i++) {
+    const ref = parsed.a[i];
+    if (ref) assignSeriesToViewport(api, i, ref);
+  }
+} else {
+  // Demo defaults
+  assignSeriesToViewport(api, 0, { studyInstanceUID: "A", seriesInstanceUID: "S1" });
+  if (api.cols > 1)
+    assignSeriesToViewport(api, 1, { studyInstanceUID: "A", seriesInstanceUID: "S2" });
+}
+
+// Keep hash in sync with current layout state after renders/changes
+const syncHash = () => {
+  const a = getAssignments(api);
+  updateHashForLayout({ r: api.rows, c: api.cols, a }, true);
+};
+
+// Initial sync
+syncHash();
+
+// Observe mutations to trigger sync on render changes
+const mo = new MutationObserver(() => syncHash());
+mo.observe(layoutRoot, { childList: true, subtree: true, attributes: true });

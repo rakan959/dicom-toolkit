@@ -568,13 +568,13 @@ properties: [P03-mpr-roundtrip]
 
 - id: U06
   title: Hash-based routing for study/series/layout (parse/serialize round-trip)
-  status: todo
+  status: done
   priority: 2
   size: S
   risk: M
   depends_on: [T04, T06]
   requirements: [F-109]
-  artifacts_to_touch: [site/main.ts, src/ui/**]
+  artifacts_to_touch: [site/main.ts, src/ui/hashState.ts]
   acceptance_tests: [A01-load-browse, A04-layout]
   properties: []
 

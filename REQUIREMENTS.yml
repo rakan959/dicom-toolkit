@@ -145,6 +145,9 @@ requirements:
   - id: F-109
     text: Support hash-based routing for deep links to a given study/series and layout preset.
     rationale: Sharable state and reload resilience.
+    notes:
+      - Layout rows/cols and assignments are encoded/decoded from URL hash in site main demo; deep links to specific series supported via SeriesRef assignments.
+      - Full study/series route integration in React shell pending.
 
   - id: F-110
     text: Persist user settings (theme, last layout, last sort) to localStorage with explicit opt-out.
