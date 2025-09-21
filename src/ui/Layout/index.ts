@@ -1,4 +1,4 @@
-export type ViewportId = number;
+// ViewportId kept as number for simplicity
 
 export interface LayoutOptions {
   rows: number;
@@ -43,6 +43,9 @@ function renderGrid(root: HTMLElement, rows: number, cols: number, assigns: (Ser
   root.innerHTML = "";
   const container = document.createElement("div");
   container.setAttribute("data-test", "layout");
+  container.setAttribute("role", "grid");
+  container.setAttribute("aria-rowcount", String(rows));
+  container.setAttribute("aria-colcount", String(cols));
   container.style.display = "grid";
   container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
@@ -51,6 +54,8 @@ function renderGrid(root: HTMLElement, rows: number, cols: number, assigns: (Ser
     const vp = document.createElement("div");
     vp.setAttribute("data-test", "viewport");
     vp.setAttribute("data-viewport-id", String(i));
+    vp.setAttribute("role", "gridcell");
+    vp.setAttribute("tabindex", "0");
     vp.style.border = "1px solid #ccc";
     vp.style.minHeight = "40px";
     const tag = document.createElement("span");
@@ -58,16 +63,44 @@ function renderGrid(root: HTMLElement, rows: number, cols: number, assigns: (Ser
     const s = assigns[i];
     tag.textContent = s ? `${s.studyInstanceUID}:${s.seriesInstanceUID}` : "(empty)";
     vp.appendChild(tag);
+    // Keyboard swap: Ctrl+Arrow to swap with neighbor
+    vp.addEventListener("keydown", (ev) => {
+      const id = i;
+      const col = id % cols;
+      const row = Math.floor(id / cols);
+      const ctrl = ev.ctrlKey || ev.metaKey;
+      if (!ctrl) return;
+      let target = -1;
+      if (ev.key === "ArrowLeft" && col > 0) target = id - 1;
+      else if (ev.key === "ArrowRight" && col < cols - 1) target = id + 1;
+      else if (ev.key === "ArrowUp" && row > 0) target = id - cols;
+      else if (ev.key === "ArrowDown" && row < rows - 1) target = id + cols;
+      if (target >= 0) {
+        ev.preventDefault();
+        swapViewports(
+          {
+            root,
+            rows,
+            cols,
+            _assignments: assigns,
+            render: () => renderGrid(root, rows, cols, assigns),
+          } as LayoutAPI,
+          id,
+          target,
+        );
+        // focus moved cell
+        const next = root.querySelector<HTMLElement>(
+          `[data-test="viewport"][data-viewport-id="${target}"]`,
+        );
+        next?.focus();
+      }
+    });
     container.appendChild(vp);
   }
   root.appendChild(container);
 }
 
-export function assignSeriesToViewport(
-  api: LayoutAPI,
-  viewportId: ViewportId,
-  ref: SeriesRef,
-): void {
+export function assignSeriesToViewport(api: LayoutAPI, viewportId: number, ref: SeriesRef): void {
   if (viewportId < 0 || viewportId >= api._assignments.length) {
     console.warn(
       `assignSeriesToViewport: Invalid viewportId (${viewportId}) provided. Valid range is 0 to ${api._assignments.length - 1}.`,
@@ -82,7 +115,7 @@ export function getAssignments(api: LayoutAPI): (SeriesRef | null)[] {
   return api._assignments.slice();
 }
 
-export function swapViewports(api: LayoutAPI, a: ViewportId, b: ViewportId): void {
+export function swapViewports(api: LayoutAPI, a: number, b: number): void {
   const n = api._assignments.length;
   if (a < 0 || b < 0 || a >= n || b >= n || a === b) return;
   const tmp = api._assignments[a];

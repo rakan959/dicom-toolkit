@@ -1,0 +1,97 @@
+/* Minimal reset and dark theme tokens */
+:root {
+  --bg: #0b0f14;
+  --bg-elev: #121821;
+  --fg: #e6eef8;
+  --muted: #a7b3c3;
+  --border: #273244;
+  --accent: #5aa7ff;
+  --accent-contrast: #08131f;
+  --focus: #7cc4ff;
+  --danger: #ff6b6b;
+}
+
+:root:not(.dark) {
+  --bg: #f7f9fc;
+  --bg-elev: #ffffff;
+  --fg: #0b0f14;
+  --muted: #334155;
+  --border: #d6deea;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --focus: #1d4ed8;
+  --danger: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Ubuntu,
+    Cantarell,
+    Noto Sans,
+    "Helvetica Neue",
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--fg);
+}
+
+button {
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+button:hover {
+  border-color: var(--accent);
+}
+button:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+[data-test="series-browser"] {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr);
+  gap: 8px;
+}
+[data-test="series-actions"] {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+[data-test="layout"] {
+  gap: 6px;
+}
+[data-test="viewport"] {
+  background: var(--bg-elev);
+  border: 1px solid var(--border) !important;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+/* Visible focus for list items/interactive */
+[tabindex="0"],
+button,
+a,
+[role="treeitem"]:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}

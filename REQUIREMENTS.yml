@@ -101,10 +101,14 @@ requirements:
   - id: F-100
     text: Provide a React-based UI shell with a responsive dark theme using CSS variables and Tailwind, defaulting to system preference and persisting user choice.
     rationale: Consistent, accessible, customizable UI foundation.
+    notes:
+      - Initial CSS variable theme and early bootstrap implemented in site/index.html and site/theme.css; full React shell optional.
 
   - id: F-101
     text: Expose a theme toggle that is idempotent and persists in localStorage; initial value honors 'prefers-color-scheme'.
     rationale: Usability; respect user/device preference.
+    notes:
+      - Implemented minimal toggle in site/main.ts (no framework dependency).
 
   - id: F-102
     text: Implement a Series Browser React component with search, sorting, and context menus for export/anonymize actions.
@@ -121,6 +125,8 @@ requirements:
   - id: F-105
     text: Provide full keyboard navigation for all actionable UI (series list, menus, grid), with visible focus indicators.
     rationale: WCAG 2.1.1 Keyboard; operability.
+    notes:
+      - Series Browser Up/Down/Enter and Layout Grid Ctrl+Arrow added; visible focus via theme.css.
 
   - id: F-106
     text: Meet color contrast ≥ 4.5:1 for text and interactive controls in both light and dark themes.
@@ -129,6 +135,8 @@ requirements:
   - id: F-107
     text: Add ARIA roles, names, and states for series items, menus, and grid cells; include live-region toasts for long-running actions.
     rationale: Screen reader support.
+    notes:
+      - Roles/labels added to Series Browser and Layout; live-region toasts pending.
 
   - id: F-108
     text: Virtualize long lists (≥ 1,000 series or instances) to keep scroll interactions at 60fps on mid-tier hardware.
@@ -165,3 +173,9 @@ requirements:
   - id: S-102
     text: Advanced anonymizer UI must not mutate input buffers; outputs are new arrays with changes.
     rationale: Reproducibility and safety.
+
+  # --- E2E coverage ---
+
+  - id: N-006
+    text: End-to-end tests (Playwright) shall cover the main workflows (load/browse, simple anonymize ZIP, advanced anonymizer preview/redaction, segmentation basic ops, SEG import/export, mesh export, video export, MPR and ultrasound viewing) and run headless in CI with screenshots on failure.
+    rationale: Verify complete user journeys and prevent regressions.

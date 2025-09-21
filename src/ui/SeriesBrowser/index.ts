@@ -29,6 +29,8 @@ export function renderSeriesBrowser(
 
   const container = document.createElement("div");
   container.setAttribute("data-test", "series-browser");
+  container.setAttribute("role", "tree");
+  container.setAttribute("aria-label", "Series Browser");
 
   // Sort studies deterministically
   const canonicalStudySig = (st: Study) => {
@@ -49,12 +51,16 @@ export function renderSeriesBrowser(
     const stEl = document.createElement("section");
     stEl.setAttribute("data-test", "study-item");
     stEl.setAttribute("data-study-uid", st.studyInstanceUID);
+    stEl.setAttribute("role", "group");
 
     const h = document.createElement("h3");
     h.textContent = `Study ${st.studyInstanceUID}`;
+    h.id = `study-${st.studyInstanceUID}`;
     stEl.appendChild(h);
 
     const ul = document.createElement("ul");
+    ul.setAttribute("role", "group");
+    ul.setAttribute("aria-labelledby", h.id);
     const seriesKey = (se: Study["series"][number]) => {
       const inst = se.sopInstances
         .map((i) => i.sopInstanceUID)
@@ -67,16 +73,38 @@ export function renderSeriesBrowser(
       const li = document.createElement("li");
       li.setAttribute("data-test", "series-item");
       li.setAttribute("data-series-uid", se.seriesInstanceUID);
+      li.setAttribute("role", "treeitem");
+      li.setAttribute("tabindex", "0");
+      li.setAttribute("aria-selected", "false");
       li.textContent = se.description ?? se.seriesInstanceUID;
+
+      // Keyboard activation for default action (advanced anonymize route if provided)
+      li.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          cb.onRouteToAdvancedAnonymize?.(st.studyInstanceUID, se.seriesInstanceUID);
+        }
+        if (ev.key === "ArrowDown") {
+          ev.preventDefault();
+          (li.nextElementSibling as HTMLElement | null)?.focus();
+        }
+        if (ev.key === "ArrowUp") {
+          ev.preventDefault();
+          (li.previousElementSibling as HTMLElement | null)?.focus();
+        }
+      });
 
       const actions = document.createElement("div");
       actions.setAttribute("data-test", "series-actions");
+      actions.setAttribute("role", "group");
+      actions.setAttribute("aria-label", "Series actions");
 
       const mkBtn = (label: string, testId: string, handler?: () => void) => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = label;
         btn.setAttribute("data-test", testId);
+        btn.setAttribute("aria-label", label);
         if (handler) btn.addEventListener("click", handler);
         return btn;
       };

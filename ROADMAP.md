@@ -367,3 +367,261 @@ properties: [P03-mpr-roundtrip]
   artifacts_to_touch: [tests/meta/coverage_all_flag.test.ts]
   acceptance_tests: [A00-CI-smoke]
   properties: []
+
+## Task YAML — E2E Coverage (Playwright)
+
+- id: E01
+  title: E2E harness and smoke stabilize (Playwright config, preview server)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T13]
+  requirements: [N-006, F-002]
+  artifacts_to_touch: [playwright.config.ts, e2e/ui-smoke.spec.ts]
+  acceptance_tests: [A00-CI-smoke]
+  properties: []
+
+- id: E02
+  title: E2E - Load & Browse (series tree and search)
+  status: done
+  priority: 2
+  size: S
+  risk: M
+  depends_on: [E01, T04]
+  requirements: [F-005, F-015, N-006]
+  artifacts_to_touch: [e2e/load_browse.spec.ts]
+  acceptance_tests: [A01-load-browse]
+  properties: []
+
+- id: E03
+  title: E2E - Simple anonymize ZIP flow
+  status: todo
+  priority: 2
+  size: S
+  risk: M
+  depends_on: [E01, T03]
+  requirements: [F-006, F-015, N-006]
+  artifacts_to_touch: [e2e/simple_anonymize.spec.ts]
+  acceptance_tests: [A02-simple-anon]
+  properties: []
+
+- id: E04
+  title: E2E - Advanced anonymizer preview & redaction
+  status: todo
+  priority: 3
+  size: M
+  risk: M
+  depends_on: [E01, T05, T14]
+  requirements: [F-007, S-003, N-006]
+  artifacts_to_touch: [e2e/advanced_anonymizer.spec.ts]
+  acceptance_tests: [A03-advanced-anon]
+  properties: []
+
+- id: E05
+  title: E2E - Layout and viewport assignment
+  status: todo
+  priority: 3
+  size: S
+  risk: M
+  depends_on: [E01, T06]
+  requirements: [F-003, N-006]
+  artifacts_to_touch: [e2e/layout.spec.ts]
+  acceptance_tests: [A04-layout]
+  properties: []
+
+- id: E06
+  title: E2E - MPR view smoke
+  status: todo
+  priority: 4
+  size: S
+  risk: M
+  depends_on: [E01, T07]
+  requirements: [F-004, N-006]
+  artifacts_to_touch: [e2e/mpr.spec.ts]
+  acceptance_tests: [A05-mpr]
+  properties: []
+
+- id: E07
+  title: E2E - Ultrasound view smoke
+  status: todo
+  priority: 4
+  size: S
+  risk: M
+  depends_on: [E01, T08]
+  requirements: [F-008, N-006]
+  artifacts_to_touch: [e2e/us.spec.ts]
+  acceptance_tests: [A06-us]
+  properties: []
+
+- id: E08
+  title: E2E - Segmentation basic tools
+  status: todo
+  priority: 4
+  size: M
+  risk: M
+  depends_on: [E01, T09]
+  requirements: [F-009, N-006]
+  artifacts_to_touch: [e2e/segmentation.spec.ts]
+  acceptance_tests: [A07-seg]
+  properties: []
+
+- id: E09
+  title: E2E - SEG import/export round-trip
+  status: todo
+  priority: 4
+  size: M
+  risk: M
+  depends_on: [E01, T10]
+  requirements: [F-010, N-006]
+  artifacts_to_touch: [e2e/seg_io.spec.ts]
+  acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: E10
+  title: E2E - Mesh export (STL/GLB)
+  status: todo
+  priority: 5
+  size: S
+  risk: M
+  depends_on: [E01, T11]
+  requirements: [F-011, N-006]
+  artifacts_to_touch: [e2e/mesh.spec.ts]
+  acceptance_tests: [A09-mesh]
+  properties: []
+
+- id: E11
+  title: E2E - Video export (layout & series)
+  status: todo
+  priority: 5
+  size: M
+  risk: M
+  depends_on: [E01, T12]
+  requirements: [F-012, F-013, N-006]
+  artifacts_to_touch: [e2e/video_export.spec.ts]
+  acceptance_tests: [A10-video]
+  properties: []
+
+- id: E12
+  title: E2E - GH Pages deploy smoke (static site loads)
+  status: todo
+  priority: 2
+  size: XS
+  risk: L
+  depends_on: [E01, T13]
+  requirements: [F-002, N-006]
+  artifacts_to_touch: [e2e/gh_pages.spec.ts]
+  acceptance_tests: [A11-gh-pages]
+  properties: []
+
+## Task YAML — UI Modernization (Dark theme, A11y, Routing)
+
+# Note: Tasks map to existing requirement IDs (F-100..F-111, N-101..N-103, S-101..S-102) to preserve traceability.
+
+- id: U02
+  title: Series Browser A11y — roles, labels, keyboard nav (Up/Down, Enter)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T04]
+  requirements: [F-105, F-107]
+  artifacts_to_touch: [src/ui/SeriesBrowser/index.ts]
+  acceptance_tests: [A01-load-browse]
+  properties: []
+
+- id: U03
+  title: Layout Grid A11y — role=grid and keyboard reordering (Ctrl+Arrow)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T06]
+  requirements: [F-103, F-105]
+  artifacts_to_touch: [src/ui/Layout/index.ts]
+  acceptance_tests: [A04-layout]
+  properties: []
+
+- id: U04
+  title: Advanced Anonymizer preview — HiDPI canvas scaling and ARIA
+  status: done
+  priority: 2
+  size: XS
+  risk: L
+  depends_on: [T05]
+  requirements: [F-007]
+  artifacts_to_touch: [src/ui/AnonymizerAdvanced/index.ts]
+  acceptance_tests: [A03-advanced-anon]
+  properties: []
+
+- id: U05
+  title: Theme shell — early bootstrap, dark/light tokens, toggle persistence
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T13]
+  requirements: [F-100, F-101, N-101]
+  artifacts_to_touch: [site/index.html, site/theme.css, site/main.ts]
+  acceptance_tests: [A12-ui-theme]
+  properties: []
+
+- id: U06
+  title: Hash-based routing for study/series/layout (parse/serialize round-trip)
+  status: todo
+  priority: 2
+  size: S
+  risk: M
+  depends_on: [T04, T06]
+  requirements: [F-109]
+  artifacts_to_touch: [site/main.ts, src/ui/**]
+  acceptance_tests: [A01-load-browse, A04-layout]
+  properties: []
+
+- id: U07
+  title: Persist user settings (theme, layout, sort) with opt-out
+  status: todo
+  priority: 2
+  size: XS
+  risk: L
+  depends_on: [U06]
+  requirements: [F-110]
+  artifacts_to_touch: [site/main.ts]
+  acceptance_tests: [A12-ui-theme]
+  properties: []
+
+- id: U08
+  title: Non-blocking toasts and error surfaces (aria-live)
+  status: todo
+  priority: 2
+  size: S
+  risk: M
+  depends_on: [T04, T06]
+  requirements: [F-111, F-107]
+  artifacts_to_touch: [src/ui/**]
+  acceptance_tests: [A01-load-browse]
+  properties: []
+
+- id: U09
+  title: Virtualize long series lists (≥ 1,000) to keep 60fps
+  status: todo
+  priority: 3
+  size: M
+  risk: M
+  depends_on: [T04]
+  requirements: [F-108, N-102]
+  artifacts_to_touch: [src/ui/SeriesBrowser/**]
+  acceptance_tests: [A01-load-browse]
+  properties: []
+
+- id: U10
+  title: Map CONTRACTS/ui.theme.schema.json to CSS variables (JSON-driven theme)
+  status: todo
+  priority: 3
+  size: S
+  risk: L
+  depends_on: [U05]
+  requirements: [F-100]
+  artifacts_to_touch: [src/ui-react/theme/applyTheme.ts, site/theme.css]
+  acceptance_tests: [A12-ui-theme]
+  properties: []

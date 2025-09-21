@@ -30,9 +30,7 @@ export function createAdvancedAnonymizerUI(root: HTMLElement): AdvancedAnonymize
   const anonymizer = new Anonymizer("advanced");
 
   const ensureCanvas = (): HTMLCanvasElement => {
-    const existing = root.querySelector(
-      "canvas[data-test=anon-adv-preview]",
-    ) as HTMLCanvasElement | null;
+    const existing = root.querySelector<HTMLCanvasElement>("canvas[data-test=anon-adv-preview]");
     if (existing) return existing;
     // Build deterministic DOM
     root.innerHTML = "";
@@ -40,6 +38,8 @@ export function createAdvancedAnonymizerUI(root: HTMLElement): AdvancedAnonymize
     container.setAttribute("data-test", "anon-adv-ui");
     const canvas = document.createElement("canvas");
     canvas.setAttribute("data-test", "anon-adv-preview");
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute("aria-label", "Anonymizer preview");
     canvas.width = Math.max(1, w);
     canvas.height = Math.max(1, h);
     container.appendChild(canvas);
@@ -49,10 +49,30 @@ export function createAdvancedAnonymizerUI(root: HTMLElement): AdvancedAnonymize
 
   const draw = () => {
     const canvas = ensureCanvas();
-    canvas.width = Math.max(1, w);
-    canvas.height = Math.max(1, h);
+    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+    canvas.width = Math.max(1, w) * dpr;
+    canvas.height = Math.max(1, h) * dpr;
+    canvas.style.width = `${Math.max(1, w)}px`;
+    canvas.style.height = `${Math.max(1, h)}px`;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    // In jsdom or test environments, setTransform may be missing or non-callable.
+    // Try HiDPI scaling when possible, otherwise render without transforms.
+    if (dpr !== 1) {
+      const anyCtx = ctx as unknown as {
+        setTransform?: (...args: number[]) => void;
+        scale?: (x: number, y: number) => void;
+      };
+      try {
+        if (typeof anyCtx.setTransform === "function") {
+          anyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        } else if (typeof anyCtx.scale === "function") {
+          anyCtx.scale(dpr, dpr);
+        }
+      } catch {
+        // ignore transform errors in non-browser test environments
+      }
+    }
     // Prepare RGBA image from 8-bit grayscale-like data
     const buf = getRedactedBuffer();
     const img = ctx.createImageData(Math.max(1, w), Math.max(1, h));
