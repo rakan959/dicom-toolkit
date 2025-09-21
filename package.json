@@ -24,7 +24,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "mutation:quick": "stryker run --mutate 'src/**/*.ts' --timeoutFactor 1.5 --concurrency 2 --testRunner vitest --fileLogLevel error",
+    "mutation:quick": "stryker run --mutate 'src/**/*.ts' --timeoutFactor 1.5 --concurrency 24 --testRunner vitest --fileLogLevel error",
     "mutation": "stryker run",
     "check:reqs": "node tools/check_requirements.mjs"
   },

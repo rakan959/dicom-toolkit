@@ -90,6 +90,18 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
   acceptance_tests: [A01-load-browse]
   properties: []
 
+- id: T21
+  title: Offline-only guardrail (no network APIs in source)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T01]
+  requirements: [N-005]
+  artifacts_to_touch: [tests/meta/offline_guard.test.ts]
+  acceptance_tests: [A00-CI-smoke]
+  properties: []
+
 - id: T16
   title: Extract deterministic UID generator for tests
   status: done
@@ -140,7 +152,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 
 - id: T20
   title: Refactor any remaining UID generators to shared utility (noop if none)
-  status: todo
+  status: done
   priority: 3
   size: XS
   risk: L
