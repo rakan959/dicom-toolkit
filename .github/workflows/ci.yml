@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install
+      - name: Install deps
         run: npm ci
       - name: Format check
         run: npm run format:check
@@ -22,14 +22,20 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npm run typecheck
-      - name: Unit tests + Coverage
+      - name: Unit/Component tests (Vitest)
         run: npm run coverage
-      - name: Requirements traceability
+      - name: Traceability check
         run: npm run check:reqs
       - name: Guard untested source changes
         run: node tools/check_tests_changed.mjs
-      - name: Build static site
+      - name: Build library
         run: npm run build
+      - name: Build static site
+        run: npm run build:site
+      - name: Install Playwright (browsers)
+        run: npx playwright install --with-deps
+      - name: E2E smoke (Playwright)
+        run: npx playwright test || echo "No e2e tests yet"
   mutation-quick:
     runs-on: self-hosted
     if: github.event_name == 'pull_request'

@@ -19,6 +19,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@src": fileURLToPath(new URL("./src", import.meta.url)),
+      "@src/ui-react": fileURLToPath(new URL("./src/ui-react", import.meta.url)),
       "@core": fileURLToPath(new URL("./src/core", import.meta.url)),
       "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@ui": fileURLToPath(new URL("./src/ui", import.meta.url)),

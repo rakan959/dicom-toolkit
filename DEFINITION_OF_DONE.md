@@ -9,3 +9,11 @@
 - Documentation updated: TEST_STRATEGY/ROADMAP as needed.
 - No network calls at runtime (verified by tests/mocks).
 - For anonymization changes: PHI guard and redaction properties have tests proving invariants.
+
+## UI-specific gates
+
+- Lighthouse Accessibility ≥ 90 on main views (locally via CI script).
+- UI shell JS budget ≤ 250 KiB gz (excluding heavy adapters) with a CI check.
+- Playwright smoke suite green on CI (headless), with screenshots on failure.
+- Contrast validation script passes for text and interactive tokens (≥ 4.5:1).
+- Keyboard navigation verified (tab order, focus visible, escape closes dialogs).

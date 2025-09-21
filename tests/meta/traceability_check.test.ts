@@ -10,10 +10,13 @@ describe("Traceability invariant (@req: N-004)", () => {
     const root = path.resolve(__dirname, "..", "..");
     const reqDoc: any = yaml.load(fs.readFileSync(path.join(root, "REQUIREMENTS.yml"), "utf8"));
     const reqs: string[] = (reqDoc.requirements || []).map((r: any) => r.id);
-    const files = fg.sync(["tests/**/*.test.ts", "tests/**/*.spec.ts"], {
-      cwd: root,
-      absolute: true,
-    });
+    const files = fg.sync(
+      ["tests/**/*.test.ts", "tests/**/*.spec.ts", "tests/**/*.test.tsx", "tests/**/*.spec.tsx"],
+      {
+        cwd: root,
+        absolute: true,
+      },
+    );
     const byId = new Map<string, string[]>();
     reqs.forEach((id) => byId.set(id, []));
     for (const file of files) {

@@ -20,7 +20,14 @@ function main() {
     process.exit(1);
   }
 
-  const testFiles = glob.sync(["tests/**/*.test.ts", "tests/**/*.spec.ts"], {
+  const testFiles = glob.sync([
+    "tests/**/*.test.ts",
+    "tests/**/*.test.tsx",
+    "tests/**/*.spec.ts",
+    "tests/**/*.spec.tsx",
+    "e2e/**/*.spec.ts",
+    "e2e/**/*.test.ts",
+  ], {
     cwd: root,
     absolute: true,
   });

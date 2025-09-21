@@ -3,8 +3,13 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   test: {
+    globals: true,
     environment: "jsdom",
-    setupFiles: [fileURLToPath(new URL("./tests/setup/canvas.ts", import.meta.url))],
+    setupFiles: [
+      fileURLToPath(new URL("./tests/setup/canvas.ts", import.meta.url)),
+      fileURLToPath(new URL("./tests/setup/rtl.ts", import.meta.url)),
+    ],
+    exclude: ["node_modules/**", "dist/**", "e2e/**"],
     coverage: {
       provider: "v8",
       thresholds: { lines: 0.8, functions: 0.8, branches: 0.8, statements: 0.8 },
@@ -25,6 +30,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@src": fileURLToPath(new URL("./src", import.meta.url)),
+      "@src/ui-react": fileURLToPath(new URL("./src/ui-react", import.meta.url)),
       "@core": fileURLToPath(new URL("./src/core", import.meta.url)),
       "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@ui": fileURLToPath(new URL("./src/ui", import.meta.url)),

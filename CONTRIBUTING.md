@@ -2,16 +2,12 @@
 
 ## Tooling
 
-- Language: TypeScript; Build: Vite.
-- Tests: Vitest (+ fast-check). E2E-capable structure (Playwright-ready).
-- Lint/Format: ESLint + Prettier.
-- Pre-commit hooks via `pre-commit` (optional) to run lint/format; CI enforces same.
-
 ## Getting started
 
-1. `npm i`
-2. `npm test`
-3. `npm run dev`
+- Stack: React + TypeScript + Vite + Tailwind + shadcn/ui.
+- Dev server: `npm run dev` (serves `site/` using `vite.site.config.ts`).
+- Component tests: `npm test` (Vitest + jsdom + React Testing Library).
+- E2E (optional locally): `npx playwright install && npx playwright test`.
 
 ## Adding a requirement
 

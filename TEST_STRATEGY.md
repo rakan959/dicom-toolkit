@@ -71,3 +71,37 @@ Each acceptance/property/metamorphic test lists `@req:` tags linking to `REQUIRE
 - Coverage thresholds are enforced at 80% (lines/funcs/branches/statements) over executable source files only.
 - We include `src/**/*.{ts,tsx}` and exclude non-executable or config/scaffold files (site, tools, contracts, d.ts, barrel index.ts) to measure meaningful coverage.
 - Mutation quick-run is tracked separately and must remain above the configured break threshold.
+
+## UI Test Strategy (additions)
+
+### Acceptance tests (Vitest + React Testing Library; Playwright-ready)
+
+- A11-ui-shell — @req: F-100, F-101, N-101, N-103
+  Given the app shell renders → system preference is dark, no prior choice → document has `class="dark"` and controls have sufficient contrast.
+- A12-theme-toggle — @req: F-101, F-106
+  Toggle twice returns to original and persists.
+- A13-routing-deeplinks — @req: F-109
+  Hash `#/study/A/series/S1?layout=1x2` focuses A/S1 and applies 1x2.
+- A14-series-browser — @req: F-102, F-105, F-107
+  Search filters; keyboard context menu works with ARIA.
+- A15-layout-grid — @req: F-103, F-105
+  DnD + keyboard reorder swaps assignments, focus preserved.
+- A16-advanced-anon-react — @req: F-104, S-102
+  Preview updates; output buffer is a new array.
+
+### Property-based tests (fast-check)
+
+- P10-theme-idempotent — @req: F-101 — even toggles restore original.
+- P11-list-virtualization-bounds — @req: F-108 — rendered rows within [H, H+buffer].
+- P12-redaction-nonmutation — @req: S-102 — wrapper never mutates input.
+- P13-focus-trap — @req: F-105 — focus cycles within trap.
+- P14-contrast-bounds — @req: F-106 — token pairs ≥ 4.5:1.
+
+### Metamorphic tests
+
+- M10-route-reload-invariance — @req: F-109 — reload preserves selection/layout.
+- M11-grid-permutation-invariance — @req: F-103 — swap twice = identity.
+
+### Traceability
+
+New UI tests include `@req:` tags. `tools/check_requirements.ts` now scans `.tsx` and `e2e/**`.

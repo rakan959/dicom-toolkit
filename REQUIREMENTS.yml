@@ -1,7 +1,3 @@
-# Atomic, testable requirements with rationale.
-
-# IDs: F-### (functional), N-### (non-functional), S-### (safety/privacy)
-
 meta:
   version: 1
   source: "DICOM Toolkit SPEC"
@@ -99,3 +95,73 @@ requirements:
   - id: N-005
     text: The system shall operate without DICOMweb; any HTTP requests to remote hosts are forbidden at runtime.
     rationale: Offline-only constraint.
+
+  # --- UI additions ---
+
+  - id: F-100
+    text: Provide a React-based UI shell with a responsive dark theme using CSS variables and Tailwind, defaulting to system preference and persisting user choice.
+    rationale: Consistent, accessible, customizable UI foundation.
+
+  - id: F-101
+    text: Expose a theme toggle that is idempotent and persists in localStorage; initial value honors 'prefers-color-scheme'.
+    rationale: Usability; respect user/device preference.
+
+  - id: F-102
+    text: Implement a Series Browser React component with search, sorting, and context menus for export/anonymize actions.
+    rationale: Discoverability and efficient workflows.
+
+  - id: F-103
+    text: Implement a Layout Grid React component with drag-and-drop and keyboard reordering that updates a single source of truth.
+    rationale: Accessibility and predictability.
+
+  - id: F-104
+    text: Implement an Advanced Anonymizer React component that previews redaction rectangles over pixel data without mutating inputs.
+    rationale: Safety and clarity.
+
+  - id: F-105
+    text: Provide full keyboard navigation for all actionable UI (series list, menus, grid), with visible focus indicators.
+    rationale: WCAG 2.1.1 Keyboard; operability.
+
+  - id: F-106
+    text: Meet color contrast ≥ 4.5:1 for text and interactive controls in both light and dark themes.
+    rationale: WCAG 1.4.3 Contrast (Minimum).
+
+  - id: F-107
+    text: Add ARIA roles, names, and states for series items, menus, and grid cells; include live-region toasts for long-running actions.
+    rationale: Screen reader support.
+
+  - id: F-108
+    text: Virtualize long lists (≥ 1,000 series or instances) to keep scroll interactions at 60fps on mid-tier hardware.
+    rationale: Performance at scale.
+
+  - id: F-109
+    text: Support hash-based routing for deep links to a given study/series and layout preset.
+    rationale: Sharable state and reload resilience.
+
+  - id: F-110
+    text: Persist user settings (theme, last layout, last sort) to localStorage with explicit opt-out.
+    rationale: Convenience with privacy.
+
+  - id: F-111
+    text: Provide non-blocking progress indicators and errors (toasts/dialogs) for import/export/anonymize flows.
+    rationale: Feedback and error recovery.
+
+  - id: N-101
+    text: UI shell JavaScript budget ≤ 250 KiB gz (excluding heavy adapters like WebCodecs/vtk/ffmpeg).
+    rationale: Fast initial load.
+
+  - id: N-102
+    text: First Meaningful Paint ≤ 2s on a 2019 laptop (i5, 8GB) in throttled 3G simulation.
+    rationale: Perceived performance.
+
+  - id: N-103
+    text: Lighthouse Accessibility score ≥ 90 on main routes.
+    rationale: A11y quality bar.
+
+  - id: S-101
+    text: UI logs and error surfaces must never include raw DICOM headers or PHI; redact before rendering.
+    rationale: Privacy protection.
+
+  - id: S-102
+    text: Advanced anonymizer UI must not mutate input buffers; outputs are new arrays with changes.
+    rationale: Reproducibility and safety.

@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@core/*": ["src/core/*"],
+      "@src/ui-react/*": ["src/ui-react/*"],
       "@adapters/*": ["adapters/*"],
       "@ui/*": ["src/ui/*"],
       "@utils/*": ["src/utils/*"],

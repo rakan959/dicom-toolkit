@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/ui.theme.schema.json",
+  "title": "UITokens",
+  "type": "object",
+  "required": ["name", "mode", "colors"],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["light", "dark"]
+    },
+    "colors": {
+      "type": "object",
+      "required": [
+        "bg",
+        "surface",
+        "text",
+        "muted",
+        "primary",
+        "primaryText",
+        "accent",
+        "accentText",
+        "focus"
+      ],
+      "properties": {
+        "bg": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "surface": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "text": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "muted": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "primary": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "primaryText": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "accentText": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        },
+        "focus": {
+          "type": "string",
+          "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "default-dark",
+      "mode": "dark",
+      "colors": {
+        "bg": "#0B0F14",
+        "surface": "#131A22",
+        "text": "#E6EDF3",
+        "muted": "#94A3B8",
+        "primary": "#3B82F6",
+        "primaryText": "#0B0F14",
+        "accent": "#22D3EE",
+        "accentText": "#0B0F14",
+        "focus": "#93C5FD"
+      }
+    }
+  ]
+}

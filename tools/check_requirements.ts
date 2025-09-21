@@ -13,10 +13,20 @@ function main() {
   const reqDoc = yaml.load(fs.readFileSync(reqPath, "utf8"));
   const reqs: string[] = (reqDoc.requirements || []).map((r: any) => r.id);
 
-  const testFiles = glob.sync(["tests/**/*.test.ts", "tests/**/*.spec.ts"], {
-    cwd: root,
-    absolute: true,
-  });
+  const testFiles = glob.sync(
+    [
+      "tests/**/*.test.ts",
+      "tests/**/*.test.tsx",
+      "tests/**/*.spec.ts",
+      "tests/**/*.spec.tsx",
+      "e2e/**/*.spec.ts",
+      "e2e/**/*.test.ts",
+    ],
+    {
+      cwd: root,
+      absolute: true,
+    },
+  );
 
   const found = new Map<string, string[]>();
   reqs.forEach((id) => found.set(id, []));
