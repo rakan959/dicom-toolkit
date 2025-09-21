@@ -90,6 +90,18 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
   acceptance_tests: [A01-load-browse]
   properties: []
 
+- id: T22
+  title: Traceability inverse check (no unknown @req IDs)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T01]
+  requirements: [N-004]
+  artifacts_to_touch: [tests/meta/traceability_unknown_ids.test.ts]
+  acceptance_tests: [A00-CI-smoke]
+  properties: []
+
 - id: T21
   title: Offline-only guardrail (no network APIs in source)
   status: done
@@ -316,4 +328,16 @@ properties: [P03-mpr-roundtrip]
   requirements: [F-010]
   artifacts_to_touch: [tests/property/seg_io_uids_roundtrip.test.ts]
   acceptance_tests: [A08-seg-io]
+  properties: []
+
+- id: T23
+  title: Requirements format guard (unique IDs and pattern)
+  status: done
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T01]
+  requirements: [N-004]
+  artifacts_to_touch: [tests/meta/requirements_format.test.ts]
+  acceptance_tests: [A00-CI-smoke]
   properties: []
