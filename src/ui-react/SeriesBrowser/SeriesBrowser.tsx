@@ -7,7 +7,7 @@ type Study = { studyInstanceUID: string; series: Series[] };
 export function SeriesBrowser({ manifest }: { manifest: { studies: Study[] } }) {
   // Minimal stub to enable initial tests; fuller UI to be implemented in UI04
   return (
-    <div aria-label="Series Browser">
+    <div aria-label="Series Browser" data-test="series-browser">
       <input aria-label="Search" role="searchbox" placeholder="Search series" />
       <div aria-live="polite" aria-atomic="true" className="visually-hidden" />
       <ul>
@@ -16,6 +16,8 @@ export function SeriesBrowser({ manifest }: { manifest: { studies: Study[] } }) 
             <li
               key={s.studyInstanceUID + ":" + ser.seriesInstanceUID}
               data-testid="series-item"
+              data-test="series-item"
+              data-series-uid={ser.seriesInstanceUID}
               aria-label={`${ser.modality} ${s.studyInstanceUID}/${ser.seriesInstanceUID}`}
             >
               {ser.modality} {s.studyInstanceUID}/{ser.seriesInstanceUID}

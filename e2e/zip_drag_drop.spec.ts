@@ -37,12 +37,25 @@ test.describe("E2E: ZIP drag & drop load", () => {
       await zipBlob.arrayBuffer().then((ab) => Buffer.from(new Uint8Array(ab)).toString("base64")),
     );
 
-    const dropZone = page.locator('[data-test="drop-zone"]');
-    await expect(dropZone).toBeVisible();
+    const dropZone = page.locator('[data-test="drop-zone"], label.drop-bar');
+    await expect(dropZone.first()).toBeVisible();
 
-    // Dispatch dragover and drop with the DataTransfer
-    await dropZone.dispatchEvent("dragover", { dataTransfer: dt });
-    await dropZone.dispatchEvent("drop", { dataTransfer: dt });
+    // Dispatch dragover and drop with the DataTransfer using real DragEvent in page context
+    const zone = page.locator('[data-test="drop-zone"], label.drop-bar');
+    const zoneEl = await zone.elementHandle();
+    await page.evaluate(
+      ({ element, handle }: { element: Element; handle: DataTransfer }) => {
+        const el = element as HTMLElement;
+        const dt = handle;
+        el.dispatchEvent(
+          new DragEvent("dragover", { bubbles: true, cancelable: true, dataTransfer: dt }),
+        );
+        el.dispatchEvent(
+          new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer: dt }),
+        );
+      },
+      { element: zoneEl!, handle: dt as unknown as any },
+    );
 
     // Expect the Series Browser to reflect the newly loaded S9 series with two instances
     const seriesItems = page.locator('[data-test="series-item"]');

@@ -24,16 +24,25 @@ export function decodeLayoutState(hash: string): LayoutState | null {
   if (!m) return null;
   try {
     const json = decodeURIComponent(m[1]);
-    const obj = JSON.parse(json) as LayoutState;
-    const r = Math.max(1, Math.floor((obj as any).r || 1));
-    const c = Math.max(1, Math.floor((obj as any).c || 1));
-    const aRaw = Array.isArray((obj as any).a) ? (obj as any).a : [];
-    const a = aRaw.map((x: any) =>
+    const objUnknown = JSON.parse(json) as unknown;
+    const obj =
+      objUnknown !== null && typeof objUnknown === "object" && !Array.isArray(objUnknown)
+        ? (objUnknown as Partial<LayoutState>)
+        : {};
+    const rVal = typeof obj.r === "number" ? obj.r : 1;
+    const cVal = typeof obj.c === "number" ? obj.c : 1;
+    const r = Math.max(1, Math.floor(rVal));
+    const c = Math.max(1, Math.floor(cVal));
+    const aSrc = Array.isArray(obj.a) ? obj.a : [];
+    const a: (import("./Layout").SeriesRef | null)[] = aSrc.map((x) =>
       x &&
       typeof x === "object" &&
-      typeof x.studyInstanceUID === "string" &&
-      typeof x.seriesInstanceUID === "string"
-        ? { studyInstanceUID: x.studyInstanceUID, seriesInstanceUID: x.seriesInstanceUID }
+      typeof (x as any).studyInstanceUID === "string" &&
+      typeof (x as any).seriesInstanceUID === "string"
+        ? {
+            studyInstanceUID: (x as any).studyInstanceUID,
+            seriesInstanceUID: (x as any).seriesInstanceUID,
+          }
         : null,
     );
     return { r, c, a };

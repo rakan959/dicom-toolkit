@@ -1,4 +1,5 @@
 // ViewportId kept as number for simplicity
+export type ViewportId = number;
 
 export interface LayoutOptions {
   rows: number;
@@ -133,22 +134,47 @@ export function enableDragRearrange(api: LayoutAPI): void {
     if (el.getAttribute("data-dnd-bound") === "1") return;
     el.setAttribute("data-dnd-bound", "1");
     el.draggable = true;
-    el.addEventListener("dragstart", (ev) => {
+    el.addEventListener("dragstart", (ev: DragEvent) => {
       const id = el.getAttribute("data-viewport-id") ?? "";
       ev.dataTransfer?.setData("text/plain", id);
     });
-    el.addEventListener("dragover", (ev) => {
+    const checkOverlay: (ev: DragEvent) => void = (ev) => {
       ev.preventDefault();
-    });
-    el.addEventListener("drop", (ev) => {
+      const dt = ev.dataTransfer;
+      const isSeries = !!(dt && Array.from(dt.types || []).includes("application/x-series-ref"));
+      if (isSeries) el.setAttribute("data-drop-series", "1");
+      else el.removeAttribute("data-drop-series");
+    };
+    const alwaysShowOnEnter: (ev: DragEvent) => void = (ev) => {
       ev.preventDefault();
-      const fromStr = ev.dataTransfer?.getData("text/plain");
-      const from = fromStr ? Number(fromStr) : NaN;
+      el.setAttribute("data-drop-series", "1");
+    };
+    el.addEventListener("dragover", checkOverlay);
+    el.addEventListener("dragenter", alwaysShowOnEnter);
+    el.addEventListener("drop", (ev: DragEvent) => {
+      ev.preventDefault();
+      el.removeAttribute("data-drop-series");
+      const dt = ev.dataTransfer;
       const to = Number(el.getAttribute("data-viewport-id") ?? "NaN");
+      if (dt && Array.from(dt.types || []).includes("application/x-series-ref")) {
+        try {
+          const json = dt.getData("application/x-series-ref");
+          const ref = JSON.parse(json) as SeriesRef;
+          if (!Number.isNaN(to)) assignSeriesToViewport(api, to, ref);
+          return;
+        } catch {
+          // fallthrough to swap
+        }
+      }
+      const fromStr = dt?.getData("text/plain");
+      const from = fromStr ? Number(fromStr) : NaN;
       if (!Number.isNaN(from) && !Number.isNaN(to)) {
         if (from === to) return; // no-op on self-drop
         swapViewports(api, from, to);
       }
+    });
+    el.addEventListener("dragleave", () => {
+      el.removeAttribute("data-drop-series");
     });
   });
 }

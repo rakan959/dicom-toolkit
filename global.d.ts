@@ -1,3 +1,4 @@
+declare module "dcmjs";
 // Minimal Web Crypto subset for Node test env typing
 interface MinimalCrypto {
   getRandomValues<T extends ArrayBufferView>(array: T): T;

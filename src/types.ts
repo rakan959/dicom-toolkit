@@ -10,4 +10,6 @@ export interface SeriesInstance {
 export interface Study {
   studyInstanceUID: UID;
   series: SeriesInstance[];
+  patientId?: string;
+  patientName?: string;
 }

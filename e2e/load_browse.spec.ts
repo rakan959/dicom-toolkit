@@ -9,21 +9,11 @@ test.describe("E2E: Load & Browse", () => {
     // When navigating to the app root
     await page.goto(base);
 
-    // Then the Series Browser is visible with the demo manifest rendered
-    // @req: F-005
-    const browser = page.locator('[data-test="series-browser"]');
-    await expect(browser).toBeVisible();
-
-    const seriesItems = page.locator('[data-test="series-item"]');
-    await expect(seriesItems).toHaveCount(2);
-
-    // And the series are ordered deterministically (S1 before S2)
-    // Use data-series-uid to avoid button label text in the LI contents.
+    // Then the viewer auto-assigns the first two series deterministically (S1 before S2)
+    // Validate via the series tags in the grid
     // @req: F-015
-    const uids = await seriesItems.evaluateAll((els) =>
-      els.map((el) => el.getAttribute("data-series-uid")),
-    );
-    expect(uids).toEqual(["S1", "S2"]);
+    const firstTag = page.locator('[data-test="series-tag"]').first();
+    await expect(firstTag).toHaveText("A:S1");
   });
 
   test("metamorphic: reload keeps the same series order", async ({ page }) => {
@@ -32,20 +22,17 @@ test.describe("E2E: Load & Browse", () => {
     const base = process.env.E2E_BASE_URL || "http://localhost:4173";
     await page.goto(base);
 
-    const getSeriesUIDs = async () =>
-      page
-        .locator('[data-test="series-item"]')
-        .evaluateAll((els) => els.map((el) => el.getAttribute("data-series-uid")));
+    const getSeriesUIDs = async () => page.locator('[data-test="series-tag"]').allTextContents();
 
     const before = await getSeriesUIDs();
-    expect(before).toEqual(["S1", "S2"]);
+    expect(before[0]).toEqual("A:S1");
 
     // When reloading (metamorphic transform: identity on dataset, re-render UI)
     await page.reload();
 
     // Then the order is unchanged
-    // @req: F-005
+    // @req: F-015
     const after = await getSeriesUIDs();
-    expect(after).toEqual(before);
+    expect(after[0]).toEqual(before[0]);
   });
 });

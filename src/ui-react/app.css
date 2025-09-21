@@ -1,0 +1,155 @@
+.app-grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 260px 1fr;
+  grid-template-areas:
+    "drop left-ctl"
+    "left viewer";
+  height: 100svh;
+  background: var(--bg);
+  color: var(--fg);
+}
+.dropbar {
+  grid-area: drop;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+}
+.left-rail {
+  grid-area: left;
+  overflow: auto;
+  border-right: 1px solid var(--border);
+  background: var(--bg-elev);
+  width: 260px;
+}
+.viewer-area {
+  grid-area: viewer;
+  overflow: hidden;
+  padding: 8px;
+}
+.viewer-grid {
+  width: 100%;
+  height: 100%;
+}
+.layout-controls {
+  margin-left: auto;
+}
+
+.drop-bar {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--bg-elev) 85%, transparent);
+  cursor: pointer;
+  user-select: none;
+}
+.drop-bar:hover,
+.drop-bar:focus-within {
+  border-color: var(--accent);
+}
+
+.series-panel details > summary {
+  padding: 8px 10px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.series-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px 0;
+}
+.series-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 6px;
+}
+.series-row:hover,
+.series-row:focus {
+  background: color-mix(in srgb, var(--bg-elev) 90%, transparent);
+  outline: none;
+}
+.thumb {
+  width: 64px;
+  height: 64px;
+  background: #000;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.meta .line1 {
+  font-weight: 600;
+}
+.meta .line2 {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.layout-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.layout-picker .grid {
+  display: grid;
+  grid-template-rows: repeat(5, 18px);
+  gap: 4px;
+  padding: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.layout-picker .row {
+  display: grid;
+  grid-template-columns: repeat(5, 18px);
+  gap: 4px;
+}
+.layout-picker .cell {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  border-radius: 2px;
+}
+.layout-picker .cell.active {
+  background: color-mix(in srgb, var(--accent) 35%, var(--bg-elev));
+}
+.layout-picker .cell.selected {
+  outline: 2px solid var(--accent);
+}
+
+.ctx-menu {
+  position: fixed;
+  z-index: 1000;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px;
+  display: grid;
+  gap: 4px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+.ctx-menu > button {
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--fg);
+}
+.ctx-menu > button:hover,
+.ctx-menu > button:focus {
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg-elev));
+  outline: none;
+}
+
+/* Viewport drop overlay for series assignment */
+[data-test="viewport"][data-drop-series="1"] {
+  outline: 2px dashed var(--accent);
+  outline-offset: -4px;
+}

@@ -13,7 +13,7 @@
       // Early theme bootstrap to avoid FOUC; idempotent and respects user/system pref
       (function () {
         try {
-          var key = "theme";
+          var key = "ui.theme";
           var stored = localStorage.getItem(key);
           var prefersDark =
             window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;

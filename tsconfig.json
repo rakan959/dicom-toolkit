@@ -20,5 +20,5 @@
       "@src/*": ["src/*"]
     }
   },
-  "include": ["src", "tests", "tools", "adapters", "vite.config.ts", "types.d.ts"]
+  "include": ["src", "tests", "tools", "adapters", "vite.config.ts", "types.d.ts", "global.d.ts"]
 }
