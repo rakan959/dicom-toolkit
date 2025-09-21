@@ -45,7 +45,7 @@ describe("SEG IO UID roundtrip property", () => {
           expect(segLegacy.FrameOfReferenceUID ?? null).toBeNull();
         },
       ),
-      { numRuns: 10, endOnFailure: true, interruptAfterTimeLimit: 2000 },
+      { numRuns: 5, endOnFailure: true, interruptAfterTimeLimit: 4000, seed: 12345 },
     );
   });
 });

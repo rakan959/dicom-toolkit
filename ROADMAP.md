@@ -26,7 +26,7 @@ Deterministic selection rule: Next task = the first task with `status=todo` whos
 | T11 | Mesh generation + STL/GLB export                       | done   | 4        | S    | M    | [T09]      | [F-011]                         | src/core/mesh.ts                                                     | A09-mesh          | —                      |
 | T12 | Video export (H.264 MKV default)                       | done   | 4        | M    | M    | [T06]      | [F-012,F-013]                   | src/core/video/exporter.ts                                           | A10-video         | M03-layout-permutation |
 | T13 | GH Pages deploy workflow                               | done   | 1        | XS   | L    | [T01]      | [F-002]                         | .github/workflows/gh-pages.yml, vite.config.ts                       | A11-gh-pages      | —                      |
-| T14 | Advanced anonymizer UI preview & routing polish        | todo   | 2        | S    | M    | [T05,T04]  | [F-007,F-014]                   | src/ui/AnonymizerAdvanced/\*                                         | A03-advanced-anon | —                      |
+| T14 | Advanced anonymizer UI preview & routing polish        | done   | 2        | S    | M    | [T05,T04]  | [F-007,F-014]                   | src/ui/AnonymizerAdvanced/\*                                         | A03-advanced-anon | —                      |
 
 - id: T07
   title: MPR engine & adapter
@@ -232,4 +232,16 @@ properties: [P03-mpr-roundtrip]
   requirements: [F-007, F-014]
   artifacts_to_touch: [src/ui/AnonymizerAdvanced/*]
   acceptance_tests: [A03-advanced-anon]
+  properties: []
+
+- id: T15
+  title: Stabilize SEG IO UID roundtrip property test (timeout fix)
+  status: todo
+  priority: 1
+  size: XS
+  risk: L
+  depends_on: [T10b]
+  requirements: [F-010]
+  artifacts_to_touch: [tests/property/seg_io_uids_roundtrip.test.ts]
+  acceptance_tests: [A08-seg-io]
   properties: []
