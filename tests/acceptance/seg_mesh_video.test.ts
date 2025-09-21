@@ -24,19 +24,13 @@ describe("SEG IO + Mesh + Video", () => {
     expect(status).toBe("empty_labelmap");
   });
 
-  it("Video export produces H.264 MKV by default", async () => {
+  it("Video export produces bytes; defaults to H.264 MKV", async () => {
     // @req: F-012
     // @req: F-013
-    await expect(
-      exportVideo([], {
-        target: "layout",
-        codec: "h264",
-        container: "mkv",
-        fps: 30,
-        includeOverlays: false,
-        includeAnnotations: false,
-        allowPHIOverlays: false,
-      } as any),
-    ).rejects.toThrowError(/NotImplemented/);
+    const bytes = await exportVideo([], { target: "layout", width: 2, height: 2 });
+    expect(bytes).toBeInstanceOf(Uint8Array);
+    // EBML magic at start
+    expect(bytes.slice(0, 4)).toEqual(new Uint8Array([0x1a, 0x45, 0xdf, 0xa3]));
+    expect(bytes.byteLength).toBeGreaterThanOrEqual(64);
   });
 });
