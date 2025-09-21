@@ -7,7 +7,7 @@ describe("Theme apply respects system preference when no stored value (metamorph
 
   function mockMatchMedia(dark: boolean) {
     // minimal mock covering .matches
-     
+
     (window as any).matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: dark && query.includes("prefers-color-scheme: dark"),
       media: query,
